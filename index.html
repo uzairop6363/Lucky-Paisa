@@ -8,7 +8,7 @@
         /* --- 1. CORE & BACKGROUND --- */
         body {
             margin: 0; padding: 0;
-            background-color: #1a0525; /* Deep Purple Fallback */
+            background-color: #150020; 
             font-family: 'Segoe UI', sans-serif;
             height: 100vh; width: 100vw;
             overflow: hidden;
@@ -21,35 +21,52 @@
             max-width: 500px; /* Mobile View */
             background-image: url('assets/royal_bg.jpg'); 
             background-size: cover; background-position: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
             display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* Dark Overlay for Focus (Taake background game ko kharab na kare) */
+        .game-wrapper::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.95) 100%);
+            z-index: 1; 
         }
 
         /* --- 2. HEADER & LOGO --- */
         .logo-area {
-            margin-top: 40px;
+            margin-top: 50px;
             text-align: center;
             z-index: 10;
+            position: relative;
         }
         .logo-text {
-            font-size: 40px; font-weight: 900;
-            color: gold;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px #ff00de, 0 0 20px #5500ff;
-            letter-spacing: 2px;
-            background: linear-gradient(to bottom, #ffd700, #b8860b);
+            font-size: 45px; font-weight: 900;
+            color: #fff;
+            /* Gold Gradient Text */
+            background: linear-gradient(to bottom, #fffebb 0%, #ffbf00 50%, #b8860b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            /* Sharp Shadow */
+            filter: drop-shadow(0 4px 0px rgba(0,0,0,0.8));
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: shine 3s infinite linear;
+        }
+        
+        @keyframes shine {
+            0% { filter: drop-shadow(0 4px 0px rgba(0,0,0,0.8)) brightness(1); }
+            50% { filter: drop-shadow(0 4px 0px rgba(0,0,0,0.8)) brightness(1.3); }
+            100% { filter: drop-shadow(0 4px 0px rgba(0,0,0,0.8)) brightness(1); }
         }
 
-        /* --- 3. SLOT MACHINE FRAME --- */
+        /* --- 3. SLOT MACHINE (High Tech 3D) --- */
         .slot-container {
             position: relative;
-            width: 340px; height: 300px;
-            margin-top: 30px;
+            width: 360px; height: 320px;
+            margin-top: 20px;
             display: flex; justify-content: center; align-items: center;
             z-index: 5;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.2));
         }
 
         .slot-frame {
@@ -57,111 +74,104 @@
             width: 100%; height: 100%;
             background-image: url('assets/slot_frame.png');
             background-size: 100% 100%;
-            z-index: 20; /* Frame upar rahega */
+            z-index: 20; 
             pointer-events: none;
         }
 
-        /* REELS (Ghoomne waly daban) */
+        /* REELS (3D Curve Effect) */
         .reels-wrapper {
-            width: 270px; height: 180px; /* Adjust according to frame gap */
-            display: flex; gap: 10px;
-            overflow: hidden; /* Masking */
+            width: 275px; height: 190px;
+            display: flex; gap: 8px;
+            overflow: hidden;
             position: relative;
-            background: rgba(0,0,0,0.8); /* Dark background behind reels */
+            background: #000; 
             border-radius: 10px;
             padding: 0 5px;
+            /* Inner Shadow taake reels gol lagen */
+            box-shadow: inset 0 25px 30px rgba(0,0,0,0.9), inset 0 -25px 30px rgba(0,0,0,0.9);
         }
 
         .reel {
             flex: 1;
             display: flex; flex-direction: column;
             align-items: center;
-            /* Animation Logic ke liye */
-            transform: translateY(0); 
+            background: linear-gradient(90deg, #0a0a0a, #1a1a1a, #0a0a0a);
+            border-left: 1px solid #333;
+            border-right: 1px solid #333;
         }
 
         .reel-icon {
-            width: 80px; height: 80px;
-            margin: 5px 0;
+            width: 85px; height: 75px;
+            margin: 2px 0;
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            filter: drop-shadow(0 0 5px gold);
-        }
-
-        /* Blur Effect jab ghoome */
-        .blur-motion {
-            filter: blur(5px);
-            transition: filter 0.1s;
+            /* Images Sharp Rahengi */
+            image-rendering: -webkit-optimize-contrast;
         }
 
         /* --- 4. CONTROLS --- */
         .controls-area {
-            margin-top: auto; margin-bottom: 50px;
+            margin-top: auto; margin-bottom: 60px;
             display: flex; flex-direction: column; align-items: center;
-            z-index: 50;
+            z-index: 50; width: 100%;
         }
 
         .spin-btn {
-            width: 100px; height: 100px;
+            width: 110px; height: 110px;
             background-image: url('assets/btn_spin.png');
             background-size: contain; background-repeat: no-repeat;
             background-color: transparent; border: none;
             cursor: pointer;
             transition: transform 0.1s;
-            filter: drop-shadow(0 0 15px gold);
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+            animation: pulse-btn 2s infinite;
         }
-        .spin-btn:active { transform: scale(0.9); }
-        .spin-btn:disabled { filter: grayscale(1); cursor: not-allowed; }
+        @keyframes pulse-btn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8)); }
+            100% { transform: scale(1); }
+        }
 
         .balance-box {
-            background: linear-gradient(90deg, #220033, #440066);
-            border: 2px solid gold;
-            padding: 10px 30px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid gold;
+            padding: 12px 40px;
             border-radius: 50px;
-            color: white; font-weight: bold; font-size: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-            text-shadow: 0 0 5px violet;
+            color: #fff; font-weight: bold; font-size: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            text-shadow: 0 2px 4px black;
+            font-family: monospace;
+            backdrop-filter: blur(5px);
         }
 
-        /* --- 5. WIN EFFECTS & RAIN --- */
+        /* --- 5. WIN EFFECTS --- */
         .win-overlay {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            z-index: 100;
-            text-align: center;
-            pointer-events: none;
+            z-index: 100; text-align: center; pointer-events: none;
+            filter: drop-shadow(0 0 40px rgba(0,0,0,1));
         }
         .win-text {
-            font-size: 50px; font-weight: 900;
+            font-size: 60px; font-weight: 900;
             color: #fff;
-            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff8800;
-            animation: pop-win 0.5s forwards;
+            -webkit-text-stroke: 2px gold;
+            text-shadow: 0 0 20px red;
+            animation: pop-win 0.6s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .win-amount {
-            font-size: 30px; color: gold; font-weight: bold;
-            margin-top: 10px;
+            font-size: 35px; color: gold; font-weight: bold; margin-top: 5px;
             text-shadow: 0 2px 5px black;
         }
 
         @keyframes pop-win {
             0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Money Rain Container */
-        .rain-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; overflow: hidden; z-index: 80;
-        }
-        .falling-note {
-            position: absolute; top: -100px;
-            width: 60px; /* Note size */
-            animation: fall linear forwards;
-        }
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
+        /* Money Rain */
+        .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 80; }
+        .falling-note { position: absolute; top: -150px; width: 60px; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
     </style>
 </head>
@@ -181,7 +191,9 @@
         </div>
 
         <div class="slot-container">
-            <div class="slot-frame"></div> <div class="reels-wrapper">
+            <div class="slot-frame"></div>
+            
+            <div class="reels-wrapper">
                 <div class="reel" id="reel1">
                     <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
                     <div class="reel-icon" style="background-image: url('assets/icon_1000.png')"></div>
@@ -208,56 +220,52 @@
     </div>
 
     <script>
-        // --- GAME CONFIG ---
-        // Icons list (Must match filenames)
+        // --- CONFIG ---
         const symbols = [
-            { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', name: 'SMALL WIN' },
+            { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', name: 'GOOD WIN' },
             { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', name: 'BIG WIN' },
-            { id: 1000, img: 'assets/icon_1000.png', rain: 'assets/falling_1000.png', name: 'MEGA WIN' },
-            { id: 5000, img: 'assets/icon_5000.png', rain: 'assets/falling_5000.png', name: 'ULTIMATE WIN' }
+            { id: 1000, img: 'assets/icon_1000.png', rain: 'assets/falling_1000.png', name: 'SUPER WIN' },
+            { id: 5000, img: 'assets/icon_5000.png', rain: 'assets/falling_5000.png', name: 'JACKPOT' }
         ];
 
         let balance = 50000;
         let isSpinning = false;
-        const spinCost = 100;
+        const spinCost = 500; // Cost per spin
 
-        // --- SPIN LOGIC ---
+        // --- GAME LOGIC ---
         function spin() {
             if (isSpinning) return;
             if (balance < spinCost) { alert("Insufficient Balance!"); return; }
 
-            // Deduct Balance
+            // Deduct & Reset
             balance -= spinCost;
             updateBalance();
-
             isSpinning = true;
             document.getElementById('spinBtn').disabled = true;
-            document.getElementById('winMsg').style.transform = "translate(-50%, -50%) scale(0)"; // Hide win msg
-            clearRain(); // Stop old rain
+            document.getElementById('spinBtn').style.filter = "grayscale(1)";
+            document.getElementById('winMsg').style.transform = "translate(-50%, -50%) scale(0)";
+            clearRain();
 
-            // Start Reels
-            startReelAnimation('reel1', 2000);
-            startReelAnimation('reel2', 2500); // Thoda late rukega
-            startReelAnimation('reel3', 3000); // Sabse late rukega
+            // Start Animation for each reel
+            // NOTE: No blur class added anymore
+            startReelAnimation('reel1', 1500);
+            startReelAnimation('reel2', 2000); 
+            startReelAnimation('reel3', 2500); 
         }
 
         function startReelAnimation(reelId, duration) {
             const reel = document.getElementById(reelId);
-            reel.classList.add('blur-motion'); // Add Speed Blur
             
-            // Fast Random Shuffling Loop
+            // Fast swapping loop (Sharp Images)
             const interval = setInterval(() => {
                 const randomSym = symbols[Math.floor(Math.random() * symbols.length)];
-                // Hum reel ke andar 3 icons dikhate hain taake bhara hua lage
-                // Lekin sirf CENTER wala matter karta hai (Middle Icon)
                 reel.innerHTML = `
                     <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
-                    <div class="reel-icon" style="background-image: url('${randomSym.img}')" data-val="${randomSym.id}"></div>
+                    <div class="reel-icon" style="background-image: url('${randomSym.img}')"></div>
                     <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
                 `;
-            }, 100);
+            }, 80); // 80ms speed (Fast enough to look smooth, slow enough to be sharp)
 
-            // Stop Logic
             setTimeout(() => {
                 clearInterval(interval);
                 finalizeReel(reelId);
@@ -268,43 +276,37 @@
             return symbols[Math.floor(Math.random() * symbols.length)].img;
         }
 
-        // Global results holder
         let results = [];
 
         function finalizeReel(reelId) {
             const reel = document.getElementById(reelId);
-            reel.classList.remove('blur-motion');
-
-            // Determine Final Symbol (Cheat Logic: Thoda zyada jeetne do demo ke liye)
-            // 40% Chance ke teeno same honay ki koshish karein
-            let finalSym;
             
-            if (results.length > 0 && Math.random() > 0.6) {
-                // Try to match previous reel
+            // Logic to determine result
+            let finalSym;
+            // 35% chance to force match if it's reel 2 or 3
+            if (results.length > 0 && Math.random() > 0.65) {
                 finalSym = symbols.find(s => s.id === results[0]);
             } else {
                 finalSym = symbols[Math.floor(Math.random() * symbols.length)];
             }
-            
-            // Fallback agar find fail ho
             if(!finalSym) finalSym = symbols[Math.floor(Math.random() * symbols.length)];
 
-            // Set Final HTML
+            // Render Final Result (Sharp)
             reel.innerHTML = `
                 <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
                 <div class="reel-icon" style="background-image: url('${finalSym.img}')" id="res-${reelId}" data-val="${finalSym.id}"></div>
                 <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
             `;
 
-            // Push result
             if(reelId === 'reel1') results = [finalSym.id];
             else results.push(finalSym.id);
 
-            // Check Win jab teeno ruk jayen
+            // If all 3 done
             if (results.length === 3) {
                 checkWin();
                 isSpinning = false;
                 document.getElementById('spinBtn').disabled = false;
+                document.getElementById('spinBtn').style.filter = "drop-shadow(0 0 15px rgba(255, 215, 0, 0.5))";
             }
         }
 
@@ -313,10 +315,9 @@
             const val2 = results[1];
             const val3 = results[2];
 
-            // WIN CONDITION: Teeno same hone chahiye
             if (val1 === val2 && val2 === val3) {
                 const winData = symbols.find(s => s.id === val1);
-                const winAmount = val1 * 10; // 10x Win
+                const winAmount = val1 * 5; // 5x Multiplier
                 
                 balance += winAmount;
                 updateBalance();
@@ -326,13 +327,15 @@
             }
         }
 
-        // --- WIN UI ---
         function showWinMessage(text, amount) {
             const msgBox = document.getElementById('winMsg');
             msgBox.querySelector('.win-text').innerText = text;
-            msgBox.querySelector('.win-amount').innerText = "+" + amount;
+            msgBox.querySelector('.win-amount').innerText = "PKR " + amount;
             
-            // Pop Animation
+            // Trigger Animation
+            msgBox.style.animation = 'none';
+            msgBox.offsetHeight; /* trigger reflow */
+            msgBox.style.animation = 'pop-win 0.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             msgBox.style.transform = "translate(-50%, -50%) scale(1)";
         }
 
@@ -340,14 +343,10 @@
             document.getElementById('balance').innerText = balance;
         }
 
-        // --- MONEY RAIN SYSTEM ---
         function startMoneyRain(imgSrc) {
             const container = document.getElementById('rainLayer');
-            // 50 notes girayenge
-            for(let i=0; i<50; i++) {
-                setTimeout(() => {
-                    createNote(container, imgSrc);
-                }, i * 100); // Har 100ms baad ek note
+            for(let i=0; i<40; i++) {
+                setTimeout(() => { createNote(container, imgSrc); }, i * 80);
             }
         }
 
@@ -355,16 +354,11 @@
             const note = document.createElement('img');
             note.src = src;
             note.classList.add('falling-note');
-            
-            // Random Position & Speed
-            note.style.left = Math.random() * 100 + "%";
-            note.style.animationDuration = (Math.random() * 2 + 2) + "s"; // 2s to 4s speed
-            note.style.width = (Math.random() * 40 + 40) + "px"; // Random size
-            
+            note.style.left = Math.random() * 90 + "%";
+            note.style.animationDuration = (Math.random() * 2 + 1.5) + "s"; 
+            note.style.width = (Math.random() * 50 + 40) + "px"; 
             container.appendChild(note);
-
-            // Remove after animation
-            setTimeout(() => { note.remove(); }, 4000);
+            setTimeout(() => { note.remove(); }, 3500);
         }
 
         function clearRain() {
@@ -374,3 +368,4 @@
     </script>
 </body>
 </html>
+
