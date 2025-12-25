@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Alive Edition</title>
+    <title>Lucky Paisa - Final Masterpiece</title>
     <style>
         /* --- 1. CORE SETTINGS --- */
         body {
@@ -35,7 +35,7 @@
         }
         @keyframes breatheBG { from{opacity:0.8;} to{opacity:1;} }
 
-        /* --- 2. PARTICLES --- */
+        /* --- 2. PARTICLES & RAIN --- */
         .particle {
             position: absolute; background: gold; border-radius: 50%; opacity: 0.6; pointer-events: none;
             animation: floatUp linear infinite; z-index: 2;
@@ -47,7 +47,7 @@
         }
         .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 90; }
 
-        /* --- 3. UI ELEMENTS --- */
+        /* --- 3. LOGO & KING --- */
         .logo-area {
             margin-top: 30px; text-align: center; z-index: 50; position: relative;
             animation: floatLogo 3s ease-in-out infinite alternate;
@@ -76,7 +76,6 @@
             background-image: url('assets/slot_frame.png');
             background-size: 100% 100%; z-index: 20; pointer-events: none;
         }
-        /* Glimmer Effect */
         .slot-frame::before {
             content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
             background: linear-gradient(45deg, transparent 40%, rgba(255,215,0,0.3) 50%, transparent 60%);
@@ -150,31 +149,39 @@
         .animate-win-img { animation: majesticEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         @keyframes majesticEntrance { 0% { transform: scale(0) translateY(50px); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- FIXED WIN AMOUNT BOX (Not Chibba) --- */
+        /* --- BIGGER WIN AMOUNT BOX --- */
         .win-amount-box {
             margin-top: 15px;
-            /* WIDTH and HEIGHT adjusted for proper aspect ratio */
-            width: 280px; 
-            height: 100px; 
+            /* Increased Dimensions */
+            width: 360px; 
+            height: 130px; 
             
             background-image: url('assets/ui_win_amount_bg.png');
-            background-size: 100% 100%; /* Forces fit */
+            background-size: 100% 100%; /* Ensure it fills the new size */
             background-repeat: no-repeat;
             background-position: center;
             
             display: flex; justify-content: center; align-items: center;
             transform: scale(0); opacity: 0;
-            padding-top: 5px; 
+            padding-top: 8px; /* Slight offset for vertical center */
         }
         
         .animate-amount { animation: popInAmount 0.5s ease-out 0.6s forwards; }
         @keyframes popInAmount { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+        /* --- BIGGER TEXT --- */
         .win-amount {
-            font-size: 50px; font-weight: 900; font-family: 'Arial Black', sans-serif;
+            /* Increased Font Size */
+            font-size: 60px; 
+            font-weight: 900; 
+            font-family: 'Arial Black', sans-serif;
             letter-spacing: 2px;
-            background: linear-gradient(to bottom, #fff 0%, #ffd700 50%, #b8860b 100%);
+            
+            /* Gold Gradient Fill */
+            background: linear-gradient(to bottom, #fff 0%, #ffd700 40%, #b8860b 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            
+            /* Shadow for 3D effect */
             filter: drop-shadow(0 4px 0px rgba(0,0,0,0.5));
         }
 
@@ -209,10 +216,13 @@
 
         <div class="win-overlay" id="winMsg" onclick="closeWin()">
             <div class="sunburst"></div>
+            
             <img src="" id="winImage" class="win-title-img" alt="Win">
+            
             <div class="win-amount-box" id="winAmountBox">
                 <div class="win-amount" id="winAmountText">+0</div>
             </div>
+
             <div class="tap-hint">Tap to Continue</div>
         </div>
 
@@ -265,14 +275,12 @@
                 strip.innerHTML = html;
             });
             createParticles();
-            startPassiveRain(); // Start the background rain
+            startPassiveRain();
         }
 
-        // --- NEW: PASSIVE RAIN (Thori Thori Der Bad) ---
+        // --- PASSIVE RAIN ---
         function startPassiveRain() {
-            // Drop a note every 2 to 4 seconds randomly
             setInterval(() => {
-                // Only drop if win overlay is NOT active
                 if(!document.getElementById('winMsg').classList.contains('active')) {
                     createSingleFallingNote();
                 }
@@ -286,11 +294,8 @@
             const el = document.createElement('img');
             el.src = randomNote;
             el.className = 'falling-note';
-            // Random Horizontal Position
             el.style.left = Math.random() * 90 + '%';
-            // Slower speed for passive rain (3s to 5s)
             el.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            // Random size variation
             el.style.width = (Math.random() * 30 + 40) + 'px';
             
             container.appendChild(el);
@@ -308,6 +313,7 @@
 
         function spin() {
             if (balance < spinCost) { alert("Insufficient Balance!"); return; }
+            
             closeWin();
             balance -= spinCost;
             document.getElementById('balance').innerText = balance;
@@ -316,6 +322,7 @@
             document.getElementById('rainLayer').innerHTML = '';
             document.getElementById('gameScreen').classList.remove('shake-screen');
 
+            // 50/50 WIN LOGIC
             const isWin = Math.random() < 0.5; 
             let res1, res2, res3;
             if (isWin) {
@@ -371,7 +378,7 @@
             balance += amount;
             document.getElementById('balance').innerText = balance;
             showWinUI(symbol.type, amount);
-            startRain(symbol.rain); // Massive rain on win
+            startRain(symbol.rain); 
             if(symbol.type !== 'big') { document.getElementById('gameScreen').classList.add('shake-screen'); }
         }
 
@@ -434,4 +441,3 @@
     </script>
 </body>
 </html>
-
