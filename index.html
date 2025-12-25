@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Tabahi Edition</title>
+    <title>Lucky Paisa - King's Edition</title>
     <style>
         /* --- 1. CORE & BACKGROUND --- */
         body {
@@ -18,64 +18,67 @@
         .game-wrapper {
             position: relative;
             width: 100%; height: 100%;
-            max-width: 500px;
+            max-width: 500px; /* Optimized for mobile portrait */
             background-image: url('assets/royal_bg.jpg'); 
-            background-size: cover; background-position: center;
+            background-size: cover; background-position: center 80%; /* Adjusted BG focus */
             display: flex; flex-direction: column; align-items: center;
             overflow: hidden;
         }
 
-        /* Dark Vignette Overlay */
+        /* Dark Vignette & Color Overlay */
         .game-wrapper::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 40%, #000 100%);
-            z-index: 2; pointer-events: none;
+            background: radial-gradient(circle at center, rgba(100,0,150,0.2) 0%, #0a0010 100%);
+            z-index: 1; pointer-events: none;
         }
 
-        /* --- 2. GOLD PARTICLES (Background Alive) --- */
+        /* --- 2. BACKGROUND EFFECTS (Particles & Rain) --- */
         .particle {
-            position: absolute;
-            background: gold;
-            border-radius: 50%;
-            opacity: 0.6;
-            pointer-events: none;
-            animation: floatUp linear infinite;
+            position: absolute; background: gold; border-radius: 50%; opacity: 0.6; pointer-events: none;
+            animation: floatUp linear infinite; z-index: 2;
         }
         @keyframes floatUp {
             0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
             50% { opacity: 0.8; }
             100% { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
+        .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 90; }
 
-        /* --- 3. LOGO (3D & Shining) --- */
+        /* --- 3. NEW ASSETS LAYER (Logo & King) --- */
+        
+        /* 3D LOGO IMAGE */
         .logo-area {
-            margin-top: 40px; text-align: center; z-index: 10; position: relative;
+            margin-top: 30px; text-align: center; z-index: 50; position: relative;
+            animation: floatLogo 3s ease-in-out infinite alternate;
         }
-        .logo-text {
-            font-size: 50px; font-weight: 900;
-            font-family: 'Arial Black', sans-serif;
-            background: linear-gradient(180deg, #fff 0%, #ffd700 20%, #b8860b 50%, #ffd700 80%, #fff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 5px 0px #8B4513);
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            animation: shine 4s infinite linear;
+        .logo-img {
+            width: 90%; max-width: 380px; height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
         }
-        @keyframes shine {
-            0% { filter: drop-shadow(0 5px 0px #8B4513) brightness(1); }
-            50% { filter: drop-shadow(0 5px 0px #8B4513) brightness(1.3); }
-            100% { filter: drop-shadow(0 5px 0px #8B4513) brightness(1); }
+        @keyframes floatLogo { from{transform:translateY(0);} to{transform:translateY(-10px);} }
+
+        /* KING CHARACTER (The Holder) */
+        .king-char {
+            position: absolute;
+            bottom: 120px; /* Adjust to align hand with frame bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%; /* Make him big */
+            max-width: 550px;
+            height: auto;
+            z-index: 4; /* Behind Slot (z-5) but in front of BG */
+            pointer-events: none;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.8));
         }
 
-        /* --- 4. SLOT MACHINE (Tight & Packed) --- */
+        /* --- 4. SLOT MACHINE --- */
         .slot-container {
             position: relative;
             width: 360px; height: 320px;
-            margin-top: 10px;
+            margin-top: 20px; /* Spacing from logo */
             display: flex; justify-content: center; align-items: center;
-            z-index: 5;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9));
+            z-index: 5; /* In front of King */
+            filter: drop-shadow(0 30px 50px rgba(0,0,0,1)); /* Heavy shadow for depth */
         }
 
         .slot-frame {
@@ -84,124 +87,83 @@
             background-size: 100% 100%;
             z-index: 20; pointer-events: none;
         }
-
-        /* GLASS REFLECTION OVERLAY (New) */
+        /* Glass Reflection */
         .slot-frame::after {
             content: ''; position: absolute; top: 15%; left: 13%; width: 74%; height: 60%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 100%);
-            border-radius: 5px;
-            pointer-events: none;
-            z-index: 25;
+            background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 40%);
+            border-radius: 5px; pointer-events: none; z-index: 25;
         }
 
         .reels-window {
-            width: 275px; height: 190px; /* Precise height */
-            display: flex; gap: 4px;
-            overflow: hidden; 
-            position: relative;
-            background: #000;
-            border-radius: 6px;
-            box-shadow: inset 0 0 30px #000;
-            border: 2px solid #221100;
+            width: 275px; height: 190px;
+            display: flex; gap: 4px; overflow: hidden; position: relative;
+            background: #000; border-radius: 6px;
+            box-shadow: inset 0 0 40px #000; border: 2px solid #111;
         }
-
         .reel-col {
-            flex: 1;
-            position: relative;
+            flex: 1; position: relative;
             background: repeating-linear-gradient(0deg, #050505, #050505 40px, #0a0a0a 40px, #0a0a0a 80px);
-            border-left: 1px solid #222;
-            border-right: 1px solid #222;
+            border-left: 1px solid #222; border-right: 1px solid #222;
         }
-
-        .reel-strip {
-            display: flex; flex-direction: column; align-items: center;
-            transform: translateY(0);
-            /* Important for no-blur rendering */
-            will-change: transform; 
-        }
-
-        /* TIGHTER SPACING FIX */
+        .reel-strip { display: flex; flex-direction: column; align-items: center; transform: translateY(0); will-change: transform; }
         .reel-icon {
-            width: 84px; 
-            height: 60px; /* Fixed height for image area */
-            margin: 2px 0; /* Minimal gap */
-            flex-shrink: 0;
-            background-size: 90%; 
-            background-repeat: no-repeat; 
-            background-position: center;
+            width: 84px; height: 60px; margin: 2px 0; flex-shrink: 0;
+            background-size: 90%; background-repeat: no-repeat; background-position: center;
             filter: contrast(1.15) brightness(1.1);
         }
 
-        /* --- 5. CONTROLS --- */
+        /* --- 5. CONTROLS & NEW UI --- */
         .controls-area {
-            margin-top: auto; margin-bottom: 50px;
+            margin-top: auto; margin-bottom: 40px;
             display: flex; flex-direction: column; align-items: center;
-            z-index: 50; width: 100%;
+            z-index: 50; width: 100%; position: relative;
         }
 
         .spin-btn {
             width: 110px; height: 110px;
             background-image: url('assets/btn_spin.png');
-            background-size: 100% 100%;
-            background-color: transparent; border: none;
-            cursor: pointer;
-            transition: all 0.1s;
-            filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.4));
+            background-size: 100% 100%; background-color: transparent; border: none;
+            cursor: pointer; transition: all 0.1s;
+            filter: drop-shadow(0 0 25px rgba(255, 165, 0, 0.5));
+            position: relative; bottom: -10px;
         }
         .spin-btn:active { transform: scale(0.95); filter: brightness(0.8); }
         .spin-btn:disabled { filter: grayscale(1); transform: scale(0.95); cursor: not-allowed; }
 
+        /* NEW ROYAL BALANCE BOX */
         .balance-box {
-            background: linear-gradient(90deg, #1a0b2e, #2d1b4e);
-            border: 2px solid #ffd700;
-            padding: 8px 30px; border-radius: 30px;
-            color: #fff; font-weight: bold; font-size: 20px;
-            margin-bottom: 20px;
-            font-family: monospace;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            display: flex; align-items: center; gap: 8px;
+            width: 220px; height: 55px;
+            background-image: url('assets/ui_balance_royal.png');
+            background-size: 100% 100%; background-repeat: no-repeat;
+            display: flex; justify-content: center; align-items: center;
+            padding-left: 40px; /* Offset text to avoid crown area */
+            padding-right: 10px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.7));
         }
-        .balance-box::before { content: '🏦'; filter: grayscale(1) brightness(2); }
+        .balance-text {
+            color: #ffd700; font-weight: bold; font-size: 18px; font-family: monospace;
+            text-shadow: 0 1px 2px #000; letter-spacing: 1px;
+        }
 
-        /* --- 6. WIN & SHAKE EFFECTS --- */
-        .shake-screen {
-            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-2px, 0, 0); }
-            20%, 80% { transform: translate3d(4px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-            40%, 60% { transform: translate3d(6px, 0, 0); }
-        }
+        /* --- 6. WIN & ANIMATIONS --- */
+        .shake-screen { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(4px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-6px, 0, 0); } 40%, 60% { transform: translate3d(6px, 0, 0); } }
 
         .win-overlay {
-            position: absolute; top: 45%; left: 50%;
-            transform: translate(-50%, -50%) scale(0);
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) scale(0);
             z-index: 100; text-align: center; pointer-events: none; width: 100%;
         }
         .sunburst {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 600px; height: 600px;
             background: conic-gradient(from 0deg, transparent 0deg, gold 10deg, transparent 20deg);
-            background-size: 20px 20px; /* Pattern */
-            opacity: 0.2; z-index: -1;
-            animation: rotate-rays 10s infinite linear;
-            border-radius: 50%;
+            background-size: 20px 20px; opacity: 0.2; z-index: -1;
+            animation: rotate-rays 10s infinite linear; border-radius: 50%;
         }
         @keyframes rotate-rays { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-        .win-text {
-            font-size: 60px; font-weight: 900; color: #fff;
-            -webkit-text-stroke: 2px #b8860b;
-            text-shadow: 0 0 20px gold;
-        }
-        .win-amount {
-            font-size: 35px; color: #ffd700; font-weight: bold;
-            background: rgba(0,0,0,0.8); padding: 5px 20px; border-radius: 10px;
-            border: 1px solid gold; display: inline-block;
-        }
-
-        .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 80; }
+        .win-text { font-size: 60px; font-weight: 900; color: #fff; -webkit-text-stroke: 2px #b8860b; text-shadow: 0 0 30px gold; }
+        .win-amount { font-size: 35px; color: #ffd700; font-weight: bold; background: rgba(0,0,0,0.8); padding: 5px 20px; border-radius: 10px; border: 1px solid gold; display: inline-block; }
         .falling-note { position: absolute; top: -150px; width: 65px; animation: fall linear forwards; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
@@ -211,7 +173,6 @@
 
     <div class="game-wrapper" id="gameScreen">
         <div id="particles"></div>
-
         <div class="rain-container" id="rainLayer"></div>
 
         <div class="win-overlay" id="winMsg">
@@ -221,8 +182,10 @@
         </div>
 
         <div class="logo-area">
-            <div class="logo-text">LUCKY PAISA</div>
+            <img src="assets/ui_logo_3d.png" class="logo-img" alt="Lucky Paisa">
         </div>
+
+        <img src="assets/char_king_holder.png" class="king-char" alt="King">
 
         <div class="slot-container">
             <div class="slot-frame"></div>
@@ -234,14 +197,16 @@
         </div>
 
         <div class="controls-area">
-            <div class="balance-box">PKR <span id="balance">50000</span></div>
+            <div class="balance-box">
+                <span class="balance-text">PKR <span id="balance">50000</span></span>
+            </div>
             <button class="spin-btn" id="spinBtn" onclick="spin()"></button>
         </div>
 
     </div>
 
     <script>
-        // --- ASSETS & CONFIG ---
+        // --- JS LOGIC (Same as before, just works with new UI) ---
         const symbols = [
             { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', name: 'GOOD WIN' },
             { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', name: 'BIG WIN' },
@@ -251,24 +216,13 @@
 
         let balance = 50000;
         const spinCost = 500; 
-        
-        // --- SIZING LOGIC FOR PERFECT FIT ---
-        // Reel Window Height is 190px.
-        // We want to show exactly 3 icons vertically.
-        // 190 / 3 = 63.33px per item space.
-        // Icon Height = 60px, Margin = 2px top + 2px bottom = 4px. Total = 64px.
-        // This is a TIGHT fit.
         const ICON_FULL_HEIGHT = 64; 
 
-        // --- INIT: FILL REELS INITIALLY ---
         function initReels() {
             ['strip1', 'strip2', 'strip3'].forEach(id => {
                 const strip = document.getElementById(id);
                 let html = '';
-                // Fill with 3 random icons to start
-                for(let i=0; i<3; i++) {
-                    html += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`;
-                }
+                for(let i=0; i<3; i++) { html += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`; }
                 strip.innerHTML = html;
             });
             createParticles();
@@ -276,24 +230,21 @@
 
         function spin() {
             if (balance < spinCost) { alert("Insufficient Balance!"); return; }
-
             balance -= spinCost;
             document.getElementById('balance').innerText = balance;
-            
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             document.getElementById('winMsg').style.transform = "translate(-50%, -50%) scale(0)";
             document.getElementById('rainLayer').innerHTML = '';
-            document.getElementById('gameScreen').classList.remove('shake-screen'); // Reset shake
+            document.getElementById('gameScreen').classList.remove('shake-screen');
 
             const res1 = getRandomSymbol();
             const res2 = getRandomSymbol();
             const res3 = getRandomSymbol();
+            
+            // Uncomment for testing wins:
+            // if(Math.random() > 0.5) { res2 = res1; res3 = res1; }
 
-            // Force win occasionally for demo
-            // if(Math.random() > 0.7) { res2 = res1; res3 = res1; }
-
-            // Spin Durations
             rollReel('strip1', res1, 2000); 
             rollReel('strip2', res2, 2500); 
             rollReel('strip3', res3, 3000); 
@@ -306,47 +257,20 @@
 
         function rollReel(stripId, finalSymbol, duration) {
             const strip = document.getElementById(stripId);
-            
-            // 1. GENERATE LONG STRIP (No Gaps Logic)
-            // Current view has 3 icons. We append 30 random ones + 3 Final ones.
-            // Total movement will be massive, so no gaps appear.
             let content = strip.innerHTML; 
-            
-            // Add filler icons
-            for(let i=0; i<30; i++) {
-                content += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`;
-            }
-
-            // Add Final 3 (Center one is the target)
-            // We ensure proper alignment by adding top/bottom buffers in result group
+            for(let i=0; i<30; i++) { content += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`; }
             content += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`;
             content += `<div class="reel-icon" style="background-image: url('${finalSymbol.img}')" data-id="${finalSymbol.id}"></div>`;
             content += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`;
-
             strip.innerHTML = content;
-
-            // 2. ANIMATE
-            // Reset transform
             strip.style.transition = 'none';
             strip.style.transform = 'translateY(0)';
-            strip.offsetHeight; // Force reflow
-
-            // Calculate exact position to stop
-            // Total items = Old(3) + Filler(30) + Final(3) = 36 items.
-            // We want to stop such that the 2nd to last item is centered.
-            // We basically slide up by (TotalItems - 3) * Height.
-            // Wait, we append to bottom, so we move UP (negative Y).
-            
+            strip.offsetHeight; 
             const totalItems = strip.children.length;
             const moveUpPixels = (totalItems - 3) * ICON_FULL_HEIGHT; 
-            
-            // Add slight random offset for "Mechanical Stop" feel? No, keep it precise for now.
             strip.style.transition = `transform ${duration}ms cubic-bezier(0.45, 0.05, 0.55, 0.95)`;
             strip.style.transform = `translateY(-${moveUpPixels}px)`;
-
-            // 3. CLEANUP (Infinite Illusion)
             setTimeout(() => {
-                // Remove all top elements, keep only last 3
                 const last3HTML = `
                     <div class="reel-icon" style="background-image: url('${strip.children[totalItems-3].style.backgroundImage.slice(5, -2)}')"></div>
                     <div class="reel-icon" style="background-image: url('${finalSymbol.img}')"></div>
@@ -358,9 +282,7 @@
             }, duration);
         }
 
-        function getRandomSymbol() {
-            return symbols[Math.floor(Math.random() * symbols.length)];
-        }
+        function getRandomSymbol() { return symbols[Math.floor(Math.random() * symbols.length)]; }
 
         function checkWin(ids) {
             if(ids[0] === ids[1] && ids[1] === ids[2]) {
@@ -368,12 +290,8 @@
                 const amount = ids[0] * 10;
                 balance += amount;
                 document.getElementById('balance').innerText = balance;
-                
-                // Trigger Win UI
                 showWin(winSym.name, amount);
                 startRain(winSym.rain);
-                
-                // SCREEN SHAKE EFFECT
                 document.getElementById('gameScreen').classList.add('shake-screen');
             }
         }
@@ -401,24 +319,20 @@
             }
         }
 
-        // --- BACKGROUND PARTICLES ---
         function createParticles() {
             const pContainer = document.getElementById('particles');
-            for(let i=0; i<20; i++) {
+            for(let i=0; i<25; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 p.style.left = Math.random() * 100 + 'vw';
-                p.style.width = Math.random() * 5 + 'px';
-                p.style.height = p.style.width;
-                p.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                p.style.width = Math.random() * 4 + 'px'; p.style.height = p.style.width;
+                p.style.animationDuration = (Math.random() * 15 + 5) + 's';
                 p.style.animationDelay = Math.random() * 5 + 's';
                 pContainer.appendChild(p);
             }
         }
 
-        // Start
         initReels();
-
     </script>
 </body>
 </html>
