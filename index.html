@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Final Polish</title>
+    <title>Lucky Paisa - Final</title>
     <style>
         /* --- 1. CORE SETTINGS --- */
         body {
@@ -46,13 +46,33 @@
         }
         .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 90; }
 
-        /* --- 3. UI ELEMENTS --- */
+        /* --- 3. UI ELEMENTS (Back Btn & Logo) --- */
+        
+        /* NEW BACK BUTTON */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-image: url('assets/btn_back.png'); /* NEW ASSET */
+            background-size: 100% 100%;
+            background-color: transparent; border: none;
+            cursor: pointer;
+            z-index: 60;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
+            transition: transform 0.1s;
+        }
+        .back-btn:active { transform: scale(0.9); }
+
         .logo-area {
-            margin-top: 30px; text-align: center; z-index: 50; position: relative;
+            /* Margin kam kiya taake game uper shift ho */
+            margin-top: 20px; 
+            text-align: center; z-index: 50; position: relative;
             animation: floatLogo 3s ease-in-out infinite alternate;
         }
         .logo-img {
-            width: 85%; max-width: 350px; height: auto;
+            width: 80%; max-width: 320px; height: auto;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
         }
         @keyframes floatLogo { from{transform:translateY(0);} to{transform:translateY(-10px);} }
@@ -65,7 +85,8 @@
 
         /* --- 4. SLOT MACHINE --- */
         .slot-container {
-            position: relative; width: 360px; height: 320px; margin-top: 10px;
+            position: relative; width: 360px; height: 320px; 
+            margin-top: 5px; /* Gap reduced to lift game */
             display: flex; justify-content: center; align-items: center; z-index: 5; 
             filter: drop-shadow(0 30px 50px rgba(0,0,0,1));
         }
@@ -105,7 +126,10 @@
 
         /* --- 5. CONTROLS --- */
         .controls-area {
-            margin-top: auto; margin-bottom: 30px; width: 100%; padding: 0 25px; box-sizing: border-box; 
+            margin-top: auto; 
+            /* Margin increased to LIFT buttons up from bottom edge */
+            margin-bottom: 50px; 
+            width: 100%; padding: 0 25px; box-sizing: border-box; 
             display: flex; flex-direction: row; justify-content: space-between; align-items: center;
             z-index: 50; position: relative;
         }
@@ -118,33 +142,20 @@
         .spin-btn:active { transform: scale(0.95); filter: brightness(0.8); }
         .spin-btn:disabled { filter: grayscale(1); transform: scale(0.95); cursor: not-allowed; }
 
-        /* --- BALANCE BOX FIXED (NOT CHIBBA) --- */
         .balance-box {
-            /* Box bada kiya aur shape theek ki */
-            width: 240px; 
-            height: 75px; 
-            
-            background-image: url('assets/ui_balance_royal.png');
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            
+            width: 240px; height: 75px; background-image: url('assets/ui_balance_royal.png');
+            background-size: 100% 100%; background-repeat: no-repeat;
             display: flex; justify-content: center; align-items: center;
-            
-            /* Text alignment adjustments */
-            padding-left: 10px; 
-            padding-bottom: 4px;
-            
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
+            padding-left: 10px; padding-bottom: 4px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
         }
         
+        /* TEXT MADE SMALLER FOR BETTER FIT */
         .balance-text {
             color: #fffebb; 
             font-weight: 900; 
-            /* Text thoda choda kiya jesa aapne bola */
-            font-size: 24px; 
+            font-size: 20px; /* Reduced from 24px to 20px */
             font-family: 'Segoe UI', monospace;
-            text-shadow: 0 2px 4px #000; 
-            letter-spacing: 1px;
+            text-shadow: 0 2px 4px #000; letter-spacing: 1px;
         }
 
         /* --- 6. WIN OVERLAY --- */
@@ -165,18 +176,12 @@
         .animate-win-img { animation: majesticEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         @keyframes majesticEntrance { 0% { transform: scale(0) translateY(50px); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- WIN AMOUNT BOX --- */
         .win-amount-box {
-            margin-top: 20px;
-            width: 380px;  
-            height: 120px; 
+            margin-top: 20px; width: 380px; height: 120px; 
             background-image: url('assets/ui_win_panel.png');
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            background-position: center;
+            background-size: 100% 100%; background-repeat: no-repeat; background-position: center;
             display: flex; justify-content: center; align-items: center;
-            transform: scale(0); opacity: 0;
-            padding-bottom: 5px;
+            transform: scale(0); opacity: 0; padding-bottom: 5px;
         }
         
         .animate-amount { animation: popInAmount 0.5s ease-out 0.6s forwards; }
@@ -184,13 +189,10 @@
 
         .win-amount {
             font-family: 'Impact', 'Arial Black', sans-serif;
-            font-size: 50px; 
-            font-weight: 900; 
-            letter-spacing: 2px;
+            font-size: 50px; font-weight: 900; letter-spacing: 2px;
             background: linear-gradient(to bottom, #ffffff 10%, #ffd700 50%, #ff8c00 90%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 1px rgba(0,0,0,0.2);
-            filter: drop-shadow(0 4px 0 #000000);
+            -webkit-text-stroke: 1px rgba(0,0,0,0.2); filter: drop-shadow(0 4px 0 #000000);
         }
 
         .sunburst {
@@ -221,6 +223,8 @@
     <div class="game-wrapper" id="gameScreen">
         <div id="particles"></div>
         <div class="rain-container" id="rainLayer"></div>
+
+        <button class="back-btn" onclick="alert('Back to Lobby')"></button>
 
         <div class="win-overlay" id="winMsg" onclick="closeWin()">
             <div class="sunburst"></div>
