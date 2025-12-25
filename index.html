@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Final Adjust</title>
+    <title>Lucky Paisa - Alive Edition</title>
     <style>
-        /* --- 1. CORE & BACKGROUND --- */
+        /* --- 1. CORE SETTINGS --- */
         body {
             margin: 0; padding: 0;
             background-color: #0d0015; 
@@ -25,13 +25,16 @@
             overflow: hidden;
         }
 
+        /* Alive Overlay (Breathing Light) */
         .game-wrapper::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(100,0,150,0.2) 0%, #0a0010 100%);
+            background: radial-gradient(circle at center, rgba(100,0,150,0.1) 0%, #0a0010 100%);
+            animation: breatheBG 4s infinite alternate;
             z-index: 1; pointer-events: none;
         }
+        @keyframes breatheBG { from{opacity:0.8;} to{opacity:1;} }
 
-        /* --- 2. PARTICLES & RAIN --- */
+        /* --- 2. PARTICLES --- */
         .particle {
             position: absolute; background: gold; border-radius: 50%; opacity: 0.6; pointer-events: none;
             animation: floatUp linear infinite; z-index: 2;
@@ -43,7 +46,7 @@
         }
         .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 90; }
 
-        /* --- 3. LOGO & KING --- */
+        /* --- 3. UI ELEMENTS --- */
         .logo-area {
             margin-top: 30px; text-align: center; z-index: 50; position: relative;
             animation: floatLogo 3s ease-in-out infinite alternate;
@@ -54,35 +57,33 @@
         }
         @keyframes floatLogo { from{transform:translateY(0);} to{transform:translateY(-10px);} }
 
-        /* King Position - Adjusted slightly to look good behind controls */
         .king-char {
-            position: absolute;
-            bottom: 0px; 
-            left: -40px;
-            width: 130%; /* Thoda aur bara kiya taake controls ke peeche bhara hua lage */
-            max-width: 550px;
-            height: auto;
-            z-index: 4; 
-            pointer-events: none;
+            position: absolute; bottom: 20px; left: -30px; width: 120%; max-width: 500px; height: auto;
+            z-index: 4; pointer-events: none;
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.9)) brightness(1.1);
         }
 
-        /* --- 4. SLOT MACHINE --- */
+        /* --- 4. SLOT MACHINE (Alive Frame) --- */
         .slot-container {
-            position: relative;
-            width: 360px; height: 320px;
-            margin-top: 10px;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 5; 
+            position: relative; width: 360px; height: 320px; margin-top: 10px;
+            display: flex; justify-content: center; align-items: center; z-index: 5; 
             filter: drop-shadow(0 30px 50px rgba(0,0,0,1));
         }
-
         .slot-frame {
             position: absolute; width: 100%; height: 100%;
             background-image: url('assets/slot_frame.png');
-            background-size: 100% 100%;
-            z-index: 20; pointer-events: none;
+            background-size: 100% 100%; z-index: 20; pointer-events: none;
         }
+        /* Frame Glimmer Animation */
+        .slot-frame::before {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,215,0,0.3) 50%, transparent 60%);
+            background-size: 200% 200%;
+            animation: glimmer 3s infinite;
+            pointer-events: none; z-index: 21;
+        }
+        @keyframes glimmer { 0%{background-position: 100% 100%;} 100%{background-position: 0% 0%;} }
+
         .slot-frame::after {
             content: ''; position: absolute; top: 15%; left: 13%; width: 74%; height: 60%;
             background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 40%);
@@ -90,10 +91,8 @@
         }
 
         .reels-window {
-            width: 275px; height: 190px;
-            display: flex; gap: 4px; overflow: hidden; position: relative;
-            background: #000; border-radius: 6px;
-            box-shadow: inset 0 0 40px #000; border: 2px solid #111;
+            width: 275px; height: 190px; display: flex; gap: 4px; overflow: hidden; position: relative;
+            background: #000; border-radius: 6px; box-shadow: inset 0 0 40px #000; border: 2px solid #111;
         }
         .reel-col {
             flex: 1; position: relative;
@@ -107,78 +106,78 @@
             filter: contrast(1.15) brightness(1.1);
         }
 
-        /* --- 5. CONTROLS (THE FIX) --- */
+        /* --- 5. CONTROLS --- */
         .controls-area {
-            margin-top: auto; 
-            margin-bottom: 30px; /* Thoda uper kiya */
-            width: 100%;
-            padding: 0 25px; /* Side Gaps set kiye */
-            box-sizing: border-box; 
-            
-            /* PERFECT ALIGNMENT */
-            display: flex; 
-            flex-direction: row; 
-            justify-content: space-between; /* Dono kinaron par */
-            align-items: center; /* Vertically Center */
-            z-index: 50; 
-            position: relative;
+            margin-top: auto; margin-bottom: 30px; width: 100%; padding: 0 25px; box-sizing: border-box; 
+            display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+            z-index: 50; position: relative;
         }
 
-        /* SPIN BUTTON (Left) */
         .spin-btn {
-            width: 95px; height: 95px; /* Balanced Size */
-            background-image: url('assets/btn_spin.png');
-            background-size: 100% 100%; 
-            background-color: transparent; border: none;
-            cursor: pointer; transition: all 0.1s;
-            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+            width: 95px; height: 95px; background-image: url('assets/btn_spin.png');
+            background-size: 100% 100%; background-color: transparent; border: none;
+            cursor: pointer; transition: all 0.1s; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
         }
         .spin-btn:active { transform: scale(0.95); filter: brightness(0.8); }
         .spin-btn:disabled { filter: grayscale(1); transform: scale(0.95); cursor: not-allowed; }
 
-        /* BALANCE BOX (Right) - FIXED ASPECT RATIO */
         .balance-box {
-            /* Width ko Height ke hisaab se 3.5 guna rakha hai taake shape sahi rahe */
-            width: 190px; height: 55px; 
-            
-            background-image: url('assets/ui_balance_royal.png');
-            background-size: 100% 100%; /* Ab ye stretch hokar fit hoga */
-            background-repeat: no-repeat;
-            
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            
-            padding-left: 15px; /* Text Adjust */
-            padding-bottom: 3px;
-            
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
+            width: 190px; height: 55px; background-image: url('assets/ui_balance_royal.png');
+            background-size: 100% 100%; background-repeat: no-repeat;
+            display: flex; justify-content: center; align-items: center;
+            padding-left: 15px; padding-bottom: 3px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
         }
         .balance-text {
             color: #fffebb; font-weight: 900; font-size: 19px; font-family: 'Segoe UI', monospace;
             text-shadow: 0 2px 4px #000; letter-spacing: 0.5px;
         }
 
-        /* --- 6. WIN & ANIMATIONS --- */
-        .shake-screen { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shake { 10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(4px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-6px, 0, 0); } 40%, 60% { transform: translate3d(6px, 0, 0); } }
-
+        /* --- 6. ADVANCED WIN UI --- */
         .win-overlay {
-            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            position: absolute; top: 45%; left: 50%; 
+            transform: translate(-50%, -50%) scale(0);
             z-index: 100; text-align: center; pointer-events: none; width: 100%;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        
+        /* Win Image (Hidden by default) */
+        .win-title-img {
+            width: 80%; max-width: 400px; height: auto;
+            display: block; margin: 0 auto;
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.6));
+            animation: bounceIn 0.6s;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); } 80% { transform: scale(1.1); } 100% { transform: scale(1); }
+        }
+
+        .win-amount-box {
+            margin-top: -10px;
+            display: inline-block;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.9), transparent);
+            padding: 5px 40px;
+            border-top: 2px solid gold;
+            border-bottom: 2px solid gold;
+        }
+        .win-amount {
+            font-size: 45px; color: #ffd700; font-weight: 900; 
+            text-shadow: 0 0 10px orange; font-family: monospace;
+        }
+
         .sunburst {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 600px; height: 600px;
+            width: 700px; height: 700px;
             background: conic-gradient(from 0deg, transparent 0deg, gold 10deg, transparent 20deg);
-            background-size: 20px 20px; opacity: 0.2; z-index: -1;
-            animation: rotate-rays 10s infinite linear; border-radius: 50%;
+            opacity: 0.3; z-index: -1; animation: rotate-rays 10s infinite linear; border-radius: 50%;
         }
         @keyframes rotate-rays { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-        .win-text { font-size: 60px; font-weight: 900; color: #fff; -webkit-text-stroke: 2px #b8860b; text-shadow: 0 0 30px gold; }
-        .win-amount { font-size: 35px; color: #ffd700; font-weight: bold; background: rgba(0,0,0,0.8); padding: 5px 20px; border-radius: 10px; border: 1px solid gold; display: inline-block; }
+
+        .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 90; }
         .falling-note { position: absolute; top: -150px; width: 65px; animation: fall linear forwards; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        
+        .shake-screen { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-3px, 0, 0); } 20%, 80% { transform: translate3d(5px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-7px, 0, 0); } 40%, 60% { transform: translate3d(7px, 0, 0); } }
 
     </style>
 </head>
@@ -190,8 +189,10 @@
 
         <div class="win-overlay" id="winMsg">
             <div class="sunburst"></div>
-            <div class="win-text">MEGA WIN</div>
-            <div class="win-amount">+5000</div>
+            <img src="" id="winImage" class="win-title-img" alt="Win">
+            <div class="win-amount-box">
+                <div class="win-amount" id="winAmountText">+0</div>
+            </div>
         </div>
 
         <div class="logo-area">
@@ -211,22 +212,30 @@
 
         <div class="controls-area">
             <button class="spin-btn" id="spinBtn" onclick="spin()"></button>
-
             <div class="balance-box">
                 <span class="balance-text">PKR <span id="balance">50000</span></span>
             </div>
         </div>
-
     </div>
 
     <script>
-        // --- JS LOGIC ---
+        // --- CONFIG & ASSETS ---
+        // Mapping Icons to Win Tiers (Visual Only)
+        // 100 = Big, 500 = Super, 1000 = Mega, 5000 = Ultimate
         const symbols = [
-            { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', name: 'GOOD WIN' },
-            { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', name: 'BIG WIN' },
-            { id: 1000, img: 'assets/icon_1000.png', rain: 'assets/falling_1000.png', name: 'SUPER WIN' },
-            { id: 5000, img: 'assets/icon_5000.png', rain: 'assets/falling_5000.png', name: 'JACKPOT' }
+            { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', type: 'big', multiplier: 3 },
+            { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', type: 'super', multiplier: 5 },
+            { id: 1000, img: 'assets/icon_1000.png', rain: 'assets/falling_1000.png', type: 'mega', multiplier: 8 },
+            { id: 5000, img: 'assets/icon_5000.png', rain: 'assets/falling_5000.png', type: 'ultimate', multiplier: 12 }
         ];
+
+        // Win Title Images
+        const winImages = {
+            'big': 'assets/win_big.png',
+            'super': 'assets/win_super.png',
+            'mega': 'assets/win_mega.png',
+            'ultimate': 'assets/win_ultimate.png'
+        };
 
         let balance = 50000;
         const spinCost = 500; 
@@ -244,24 +253,54 @@
 
         function spin() {
             if (balance < spinCost) { alert("Insufficient Balance!"); return; }
+            
+            // Deduct cost
             balance -= spinCost;
             document.getElementById('balance').innerText = balance;
+            
+            // UI States
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             document.getElementById('winMsg').style.transform = "translate(-50%, -50%) scale(0)";
             document.getElementById('rainLayer').innerHTML = '';
             document.getElementById('gameScreen').classList.remove('shake-screen');
 
-            const res1 = getRandomSymbol();
-            const res2 = getRandomSymbol();
-            const res3 = getRandomSymbol();
+            // --- 50/50 WIN LOGIC ---
+            const isWin = Math.random() < 0.5; // 50% Chance
             
+            let res1, res2, res3;
+
+            if (isWin) {
+                // Determine WHICH win based on random tier chance
+                const rand = Math.random();
+                let winSymbol;
+                
+                if (rand < 0.5) winSymbol = symbols[0]; // 50% chance of Big Win (100 note)
+                else if (rand < 0.8) winSymbol = symbols[1]; // 30% chance of Super Win (500 note)
+                else if (rand < 0.95) winSymbol = symbols[2]; // 15% chance of Mega Win (1000 note)
+                else winSymbol = symbols[3]; // 5% chance of Ultimate Win (5000 note)
+
+                // Force all 3 to be same
+                res1 = winSymbol; res2 = winSymbol; res3 = winSymbol;
+            } else {
+                // Force Loss (Make sure they don't match)
+                res1 = getRandomSymbol();
+                res2 = getRandomSymbol();
+                // Ensure res3 is different from res1 or res2
+                do {
+                    res3 = getRandomSymbol();
+                } while (res1.id === res2.id && res2.id === res3.id); // Retry if accidentally matched
+            }
+            
+            // Start Rolling
             rollReel('strip1', res1, 2000); 
             rollReel('strip2', res2, 2500); 
             rollReel('strip3', res3, 3000); 
 
             setTimeout(() => {
-                checkWin([res1.id, res2.id, res3.id]);
+                if (isWin) {
+                    handleWin(res1);
+                }
                 btn.disabled = false;
             }, 3000);
         }
@@ -295,24 +334,53 @@
 
         function getRandomSymbol() { return symbols[Math.floor(Math.random() * symbols.length)]; }
 
-        function checkWin(ids) {
-            if(ids[0] === ids[1] && ids[1] === ids[2]) {
-                const winSym = symbols.find(s => s.id === ids[0]);
-                const amount = ids[0] * 10;
-                balance += amount;
-                document.getElementById('balance').innerText = balance;
-                showWin(winSym.name, amount);
-                startRain(winSym.rain);
+        function handleWin(symbol) {
+            // Calculate Win Amount
+            const amount = spinCost * symbol.multiplier;
+            balance += amount;
+            document.getElementById('balance').innerText = balance;
+            
+            // Trigger UI
+            showWinUI(symbol.type, amount);
+            startRain(symbol.rain);
+            
+            // Shake Effect for bigger wins
+            if(symbol.type !== 'big') {
                 document.getElementById('gameScreen').classList.add('shake-screen');
             }
         }
 
-        function showWin(text, amount) {
+        function showWinUI(type, totalAmount) {
             const msg = document.getElementById('winMsg');
-            msg.querySelector('.win-text').innerText = text;
-            msg.querySelector('.win-amount').innerText = "+ " + amount;
-            msg.style.transition = '0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            const imgEl = document.getElementById('winImage');
+            const amountEl = document.getElementById('winAmountText');
+            
+            // Set Image Source
+            imgEl.src = winImages[type];
+            
+            // Reset Amount Text
+            amountEl.innerText = "+0";
+
+            // Show Popup
             msg.style.transform = "translate(-50%, -50%) scale(1)";
+            
+            // Start Number Rolling Animation
+            animateValue(amountEl, 0, totalAmount, 1500); // 1.5 seconds counting
+        }
+
+        // --- NUMBER ROLLING ANIMATION ---
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                // Ease out formatting
+                obj.innerHTML = "+" + Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
         }
 
         function startRain(img) {
@@ -347,4 +415,3 @@
     </script>
 </body>
 </html>
-
