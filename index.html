@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Professional</title>
+    <title>Lucky Paisa - Pro Slot</title>
     <style>
         /* --- 1. CORE & BACKGROUND --- */
         body {
             margin: 0; padding: 0;
-            background-color: #150020; 
+            background-color: #100018; 
             font-family: 'Segoe UI', sans-serif;
             height: 100vh; width: 100vw;
             overflow: hidden;
@@ -24,54 +24,40 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* Overlay for Depth */
+        /* Ambient Dark Overlay */
         .game-wrapper::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 90%);
             z-index: 1; 
         }
 
-        /* --- 2. 3D METALLIC LOGO (CSS ONLY) --- */
+        /* --- 2. ALIVE LOGO (Breathing & Shining) --- */
         .logo-area {
-            margin-top: 40px;
-            text-align: center;
-            z-index: 10;
-            position: relative;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));
+            margin-top: 40px; text-align: center; z-index: 10; position: relative;
         }
         .logo-text {
-            font-size: 52px; font-weight: 900;
+            font-size: 50px; font-weight: 900;
             font-family: 'Arial Black', sans-serif;
-            color: #ffd700;
-            /* 3D Metal Effect */
-            background: linear-gradient(180deg, #fff 0%, #ffd700 20%, #b8860b 50%, #ffd700 80%, #fff 100%);
+            background: linear-gradient(180deg, #fff 0%, #ffd700 30%, #b8860b 70%, #fff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            position: relative;
-            z-index: 2;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8));
             text-transform: uppercase;
-            letter-spacing: -2px;
-            /* Stroke Effect */
-            -webkit-text-stroke: 1px #8B4513; 
+            /* ALIVE ANIMATION: Shine */
+            background-size: 200% auto;
+            animation: shine-text 3s linear infinite;
         }
-        /* Logo Glow Background */
-        .logo-area::after {
-            content: '';
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px; height: 100px;
-            background: radial-gradient(ellipse, rgba(255,215,0,0.4) 0%, transparent 70%);
-            z-index: 1;
+        @keyframes shine-text {
+            to { background-position: 200% center; }
         }
 
-        /* --- 3. PRO SLOT MACHINE --- */
+        /* --- 3. SLOT MACHINE (The Engine) --- */
         .slot-container {
             position: relative;
             width: 350px; height: 310px;
-            margin-top: 10px;
+            margin-top: 15px;
             display: flex; justify-content: center; align-items: center;
             z-index: 5;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
         }
 
         .slot-frame {
@@ -79,46 +65,61 @@
             background-image: url('assets/slot_frame.png');
             background-size: 100% 100%;
             z-index: 20; pointer-events: none;
+            /* ALIVE ANIMATION: Frame Sheen */
+            overflow: hidden;
+        }
+        /* Sheen effect passing over frame */
+        .slot-frame::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-25deg);
+            animation: sheen-pass 4s infinite;
+        }
+        @keyframes sheen-pass {
+            0% { left: -100%; }
+            20% { left: 200%; } /* Fast pass */
+            100% { left: 200%; } /* Wait */
         }
 
-        /* DARK REEL BACKGROUND (Important for contrast) */
-        .reels-wrapper {
+        /* WINDOW (Jahan se reels dikhengi) */
+        .reels-window {
             width: 270px; height: 185px;
             display: flex; gap: 5px;
-            overflow: hidden;
+            overflow: hidden; /* Zaroori hai taake lambi strip na dikhe */
             position: relative;
-            background: #050505; /* Pitch Black */
+            background: #050505;
             border-radius: 8px;
-            padding: 0 5px;
             box-shadow: inset 0 0 20px #000;
             border: 2px solid #332200;
         }
 
-        .reel {
+        /* THE STRIP (Jo uper neeche move hogi) */
+        .reel-col {
             flex: 1;
-            display: flex; flex-direction: column;
-            align-items: center;
-            /* Subtle texture inside reel */
-            background: repeating-linear-gradient(
-                0deg,
-                #0a0a0a,
-                #0a0a0a 40px,
-                #111 40px,
-                #111 80px
-            );
+            position: relative;
+            /* Background stripes for texture */
+            background: repeating-linear-gradient(0deg, #0a0a0a, #0a0a0a 40px, #111 40px, #111 80px);
             border-left: 1px solid #333;
             border-right: 1px solid #333;
         }
 
-        .reel-icon {
-            width: 80px; height: 60px; /* Adjusted Aspect Ratio for Notes */
-            margin: 10px 0;
-            background-size: contain; background-repeat: no-repeat; background-position: center;
-            filter: brightness(1.1) contrast(1.1); /* Notes Pop */
-            transform: scale(1.1);
+        .reel-strip {
+            display: flex; flex-direction: column; align-items: center;
+            /* Default position */
+            transform: translateY(0);
+            will-change: transform; /* Performance optimized */
         }
 
-        /* --- 4. CONTROLS & UI --- */
+        .reel-icon {
+            width: 80px; height: 60px; /* Fixed Height per cell */
+            margin: 10px 0; /* Gap creates total cell height: 60 + 10 + 10 = 80px approx */
+            flex-shrink: 0; /* Shrink na ho */
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            filter: contrast(1.1) brightness(1.1);
+        }
+
+        /* --- 4. CONTROLS --- */
         .controls-area {
             margin-top: auto; margin-bottom: 50px;
             display: flex; flex-direction: column; align-items: center;
@@ -131,76 +132,69 @@
             background-size: 100% 100%;
             background-color: transparent; border: none;
             cursor: pointer;
-            transition: transform 0.1s;
-            filter: drop-shadow(0 0 25px rgba(255, 165, 0, 0.6)); /* Orange Glow */
-            animation: heartbeat 1.5s infinite;
+            transition: all 0.2s;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+        }
+        
+        /* ALIVE: Pulse when ready */
+        .spin-btn:not(:disabled) {
+            animation: heartbeat 2s infinite;
         }
         @keyframes heartbeat {
             0% { transform: scale(1); }
-            5% { transform: scale(1.05); }
-            10% { transform: scale(1); }
-            15% { transform: scale(1.05); }
-            20% { transform: scale(1); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px gold); }
             100% { transform: scale(1); }
         }
 
-        .balance-box {
-            background: linear-gradient(180deg, #2a0e36 0%, #150020 100%);
-            border: 2px solid #ffd700;
-            padding: 10px 40px;
-            border-radius: 30px;
-            color: #fff; font-weight: bold; font-size: 22px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.2);
-            text-shadow: 0 2px 2px #000;
-            font-family: 'Courier New', monospace;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .balance-box::before {
-            content: '💰'; font-size: 18px;
+        /* DISABLED STATE (Gray) */
+        .spin-btn:disabled {
+            filter: grayscale(100%) brightness(0.7); /* Black & White */
+            cursor: not-allowed;
+            transform: scale(0.95);
+            animation: none; /* No heartbeat */
         }
 
-        /* --- 5. ULTRA WIN EFFECTS (Sunburst) --- */
+        .balance-box {
+            background: rgba(20, 0, 30, 0.8);
+            border: 2px solid #ffd700;
+            padding: 10px 40px; border-radius: 30px;
+            color: #fff; font-weight: bold; font-size: 22px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- 5. WIN EFFECTS --- */
         .win-overlay {
             position: absolute; top: 45%; left: 50%;
             transform: translate(-50%, -50%) scale(0);
             z-index: 100; text-align: center; pointer-events: none;
             width: 100%;
         }
-
-        /* ROTATING RAYS BEHIND TEXT */
+        /* Sunburst Rays */
         .sunburst {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 500px; height: 500px;
-            background: conic-gradient(from 0deg, transparent 0deg, gold 20deg, transparent 40deg, gold 60deg, transparent 80deg, gold 100deg, transparent 120deg, gold 140deg, transparent 160deg, gold 180deg, transparent 200deg, gold 220deg, transparent 240deg, gold 260deg, transparent 280deg, gold 300deg, transparent 320deg, gold 340deg, transparent 360deg);
-            opacity: 0.3;
-            z-index: -1;
-            animation: rotate-rays 10s infinite linear;
+            width: 600px; height: 600px;
+            background: conic-gradient(from 0deg, transparent 0deg, gold 10deg, transparent 20deg, gold 30deg, transparent 40deg, gold 50deg, transparent 60deg, gold 70deg, transparent 80deg, gold 90deg, transparent 100deg, gold 110deg, transparent 120deg, gold 130deg, transparent 140deg, gold 150deg, transparent 160deg, gold 170deg, transparent 180deg, gold 190deg, transparent 200deg, gold 210deg, transparent 220deg, gold 230deg, transparent 240deg, gold 250deg, transparent 260deg, gold 270deg, transparent 280deg, gold 290deg, transparent 300deg, gold 310deg, transparent 320deg, gold 330deg, transparent 340deg, gold 350deg, transparent 360deg);
+            opacity: 0.2; z-index: -1;
+            animation: rotate-rays 8s infinite linear;
             border-radius: 50%;
             mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
         }
         @keyframes rotate-rays { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
         .win-text {
-            font-size: 65px; font-weight: 900;
-            color: #fff;
+            font-size: 70px; font-weight: 900; color: #fff;
             -webkit-text-stroke: 3px #b8860b;
-            text-shadow: 0 5px 0 #b8860b, 0 10px 10px rgba(0,0,0,0.5);
-            animation: bounce-win 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            text-shadow: 0 5px 0 #b8860b, 0 10px 20px rgba(0,0,0,0.8);
         }
         .win-amount {
-            font-size: 40px; color: #ffd700; font-weight: bold; margin-top: 5px;
-            text-shadow: 0 2px 0 #000;
-            background: rgba(0,0,0,0.6);
-            padding: 5px 20px; border-radius: 10px;
+            font-size: 40px; color: #ffd700; font-weight: bold;
+            background: rgba(0,0,0,0.7); padding: 5px 25px; border-radius: 15px;
             display: inline-block;
-        }
-
-        @keyframes bounce-win {
-            0% { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+            border: 1px solid gold;
         }
 
         .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 80; }
@@ -212,11 +206,11 @@
 <body>
 
     <div class="game-wrapper">
-        
         <div class="rain-container" id="rainLayer"></div>
 
         <div class="win-overlay" id="winMsg">
-            <div class="sunburst"></div> <div class="win-text">MEGA WIN</div>
+            <div class="sunburst"></div>
+            <div class="win-text">MEGA WIN</div>
             <div class="win-amount">+5000</div>
         </div>
 
@@ -226,34 +220,40 @@
 
         <div class="slot-container">
             <div class="slot-frame"></div>
-            
-            <div class="reels-wrapper">
-                <div class="reel" id="reel1">
-                    <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
-                    <div class="reel-icon" style="background-image: url('assets/icon_1000.png')"></div>
-                    <div class="reel-icon" style="background-image: url('assets/icon_500.png')"></div>
+            <div class="reels-window">
+                <div class="reel-col">
+                    <div class="reel-strip" id="strip1">
+                        <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
+                        <div class="reel-icon" style="background-image: url('assets/icon_1000.png')"></div>
+                        <div class="reel-icon" style="background-image: url('assets/icon_500.png')"></div>
+                    </div>
                 </div>
-                <div class="reel" id="reel2">
-                    <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
-                    <div class="reel-icon" style="background-image: url('assets/icon_100.png')"></div>
-                    <div class="reel-icon" style="background-image: url('assets/icon_500.png')"></div>
+                <div class="reel-col">
+                    <div class="reel-strip" id="strip2">
+                         <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
+                        <div class="reel-icon" style="background-image: url('assets/icon_100.png')"></div>
+                        <div class="reel-icon" style="background-image: url('assets/icon_500.png')"></div>
+                    </div>
                 </div>
-                <div class="reel" id="reel3">
-                    <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
-                    <div class="reel-icon" style="background-image: url('assets/icon_1000.png')"></div>
-                    <div class="reel-icon" style="background-image: url('assets/icon_100.png')"></div>
+                <div class="reel-col">
+                    <div class="reel-strip" id="strip3">
+                         <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
+                        <div class="reel-icon" style="background-image: url('assets/icon_1000.png')"></div>
+                        <div class="reel-icon" style="background-image: url('assets/icon_100.png')"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="controls-area">
-            <div class="balance-box"><span id="balance">50000</span></div>
+            <div class="balance-box">PKR <span id="balance">50000</span></div>
             <button class="spin-btn" id="spinBtn" onclick="spin()"></button>
         </div>
 
     </div>
 
     <script>
+        // --- CONFIG ---
         const symbols = [
             { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', name: 'GOOD WIN' },
             { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', name: 'BIG WIN' },
@@ -262,129 +262,162 @@
         ];
 
         let balance = 50000;
-        let isSpinning = false;
         const spinCost = 500; 
+        // Height of one icon (60px) + Margin Top (10px) + Margin Bottom (10px) = 80px
+        const ICON_HEIGHT = 80; 
+        const ICONS_PER_SPIN = 20; // Kitne note ghoomenge ek spin mein (Lambi strip)
 
         function spin() {
-            if (isSpinning) return;
             if (balance < spinCost) { alert("Insufficient Balance!"); return; }
 
+            // 1. Deduct Balance & Update UI
             balance -= spinCost;
-            updateBalance();
-            isSpinning = true;
-            document.getElementById('spinBtn').disabled = true;
-            document.getElementById('spinBtn').style.filter = "grayscale(1)";
-            document.getElementById('winMsg').style.transform = "translate(-50%, -50%) scale(0)";
-            clearRain();
+            document.getElementById('balance').innerText = balance;
+            
+            // 2. Disable Button (Turn Gray)
+            const btn = document.getElementById('spinBtn');
+            btn.disabled = true;
 
-            // Faster & Sharper Spins
-            startReelAnimation('reel1', 1200);
-            startReelAnimation('reel2', 1800); 
-            startReelAnimation('reel3', 2400); 
+            // 3. Hide Win Message & Clear Rain
+            const winMsg = document.getElementById('winMsg');
+            winMsg.style.transition = '0.2s';
+            winMsg.style.transform = "translate(-50%, -50%) scale(0)";
+            document.getElementById('rainLayer').innerHTML = '';
+
+            // 4. Determine Results (Logic)
+            const result1 = getRandomSymbol();
+            const result2 = getRandomSymbol();
+            const result3 = getRandomSymbol();
+
+            // 35% Cheat Chance for Win if losses occur (Demo logic)
+            // Uncomment to force win occasionally:
+            // if(Math.random() > 0.7) { result2 = result1; result3 = result1; }
+
+            // 5. Start Smooth Rolling
+            rollReel('strip1', result1, 2000); // 2 Seconds
+            rollReel('strip2', result2, 2500); // 2.5 Seconds
+            rollReel('strip3', result3, 3000); // 3 Seconds
+
+            // 6. Check Win after last reel stops
+            setTimeout(() => {
+                checkWin([result1.id, result2.id, result3.id]);
+                btn.disabled = false; // Enable Button (Turn Gold)
+            }, 3000);
         }
 
-        function startReelAnimation(reelId, duration) {
-            const reel = document.getElementById(reelId);
-            const interval = setInterval(() => {
-                const randomSym = symbols[Math.floor(Math.random() * symbols.length)];
-                reel.innerHTML = `
-                    <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
-                    <div class="reel-icon" style="background-image: url('${randomSym.img}')"></div>
-                    <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
-                `;
-            }, 60); // Super Fast
+        function rollReel(stripId, finalSymbol, duration) {
+            const strip = document.getElementById(stripId);
+            
+            // A. Create the Long Strip Content
+            // Structure: [Current View] + [Random Noise Icons] + [Final Result Group]
+            let content = strip.innerHTML; // Keep current visual to prevent jump
+            
+            // Add Random Icons for the "Roll"
+            for(let i=0; i<ICONS_PER_SPIN; i++) {
+                content += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`;
+            }
 
+            // Add The Final 3 Icons (To show centered result)
+            // Hum 3 add karte hain taake center wala target kar saken
+            content += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`;
+            content += `<div class="reel-icon" style="background-image: url('${finalSymbol.img}')" data-id="${finalSymbol.id}"></div>`;
+            content += `<div class="reel-icon" style="background-image: url('${getRandomSymbol().img}')"></div>`;
+
+            strip.innerHTML = content;
+
+            // B. Reset Position (Instant)
+            strip.style.transition = 'none';
+            strip.style.transform = 'translateY(0)';
+
+            // Force Browser Reflow (Zaroori hai animation reset ke liye)
+            strip.offsetHeight; 
+
+            // C. Animate to the bottom
+            // Calculate total height to move
+            // We want to move UP so new icons come from bottom? 
+            // NO, Slot machines roll DOWN (Icons fall from top). 
+            // So we need to insert new items ABOVE? 
+            // Easier Logic: Move Strip UP (Simulating items falling down view is harder).
+            // Let's stick to: Strip moves UP (Icons disappear top, new come from bottom).
+            
+            const totalIcons = strip.children.length;
+            // Target index is the 2nd to last one (Our Final Symbol)
+            // But visually we want it centered.
+            // Let's simply scroll to the end.
+            
+            const moveAmount = (totalIcons - 2) * ICON_HEIGHT; // -2 to keep some buffer
+            // Correction: Move strip UP means translateY is negative.
+            
+            // Set Transition Speed
+            strip.style.transition = `transform ${duration}ms cubic-bezier(0.25, 1, 0.5, 1)`; // Ease Out effect
+            strip.style.transform = `translateY(-${moveAmount}px)`;
+
+            // D. Cleanup after animation (Infinite Roll Illusion)
+            // Jab animation ruk jaye, to strip ko chota kardo aur position reset kardo
+            // Taake DOM heavy na ho jaye.
             setTimeout(() => {
-                clearInterval(interval);
-                finalizeReel(reelId);
+                // Keep only the last 3 icons (Visual state)
+                const last3 = `
+                    <div class="reel-icon" style="background-image: url('${strip.children[totalIcons-3].style.backgroundImage.slice(5, -2)}')"></div>
+                    <div class="reel-icon" style="background-image: url('${finalSymbol.img}')"></div>
+                    <div class="reel-icon" style="background-image: url('${strip.children[totalIcons-1].style.backgroundImage.slice(5, -2)}')"></div>
+                `;
+                strip.style.transition = 'none';
+                strip.innerHTML = last3;
+                strip.style.transform = 'translateY(-80px)'; // Center the middle icon (1 icon height up)
+                // Adjustment: Since we have 3 icons, and window shows 3 (approx),
+                // translateY(-80px) shifts the first one out, showing Middle + Bottom + partial Top?
+                // Actually, let's keep it simple: 
+                // Window height ~185px. 3 Icons = 240px. 
+                // To center middle icon: translateY approx -27px (if perfectly aligned).
+                // Let's refine alignment visually in CSS, but here reset to near 0.
+                strip.style.transform = 'translateY(0)'; // Reset
             }, duration);
         }
 
-        function getRandomIcon() {
-            return symbols[Math.floor(Math.random() * symbols.length)].img;
+        function getRandomSymbol() {
+            return symbols[Math.floor(Math.random() * symbols.length)];
         }
 
-        let results = [];
-
-        function finalizeReel(reelId) {
-            const reel = document.getElementById(reelId);
-            let finalSym;
-            if (results.length > 0 && Math.random() > 0.6) {
-                finalSym = symbols.find(s => s.id === results[0]);
-            } else {
-                finalSym = symbols[Math.floor(Math.random() * symbols.length)];
-            }
-            if(!finalSym) finalSym = symbols[Math.floor(Math.random() * symbols.length)];
-
-            reel.innerHTML = `
-                <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
-                <div class="reel-icon" style="background-image: url('${finalSym.img}')" id="res-${reelId}" data-val="${finalSym.id}"></div>
-                <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
-            `;
-
-            if(reelId === 'reel1') results = [finalSym.id];
-            else results.push(finalSym.id);
-
-            if (results.length === 3) {
-                checkWin();
-                isSpinning = false;
-                document.getElementById('spinBtn').disabled = false;
-                document.getElementById('spinBtn').style.filter = "drop-shadow(0 0 25px rgba(255, 165, 0, 0.6))";
-            }
-        }
-
-        function checkWin() {
-            const val1 = results[0];
-            const val2 = results[1];
-            const val3 = results[2];
-
-            if (val1 === val2 && val2 === val3) {
-                const winData = symbols.find(s => s.id === val1);
-                const winAmount = val1 * 5; 
-                
-                balance += winAmount;
-                updateBalance();
-                
-                showWinMessage(winData.name, winAmount);
-                startMoneyRain(winData.rain);
-            }
-        }
-
-        function showWinMessage(text, amount) {
-            const msgBox = document.getElementById('winMsg');
-            msgBox.querySelector('.win-text').innerText = text;
-            msgBox.querySelector('.win-amount').innerText = "PKR " + amount;
+        function checkWin(resultIds) {
+            const [id1, id2, id3] = resultIds;
             
-            // Reflow for restart animation
-            msgBox.style.animation = 'none';
-            msgBox.offsetHeight; 
-            msgBox.style.transform = "translate(-50%, -50%) scale(1)";
-        }
-
-        function updateBalance() {
-            document.getElementById('balance').innerText = balance;
-        }
-
-        function startMoneyRain(imgSrc) {
-            const container = document.getElementById('rainLayer');
-            for(let i=0; i<40; i++) {
-                setTimeout(() => { createNote(container, imgSrc); }, i * 80);
+            if(id1 === id2 && id2 === id3) {
+                const winSym = symbols.find(s => s.id === id1);
+                const amount = id1 * 10;
+                
+                // Update Balance
+                balance += amount;
+                document.getElementById('balance').innerText = balance;
+                
+                // Show Win UI
+                showWin(winSym.name, amount);
+                startRain(winSym.rain);
             }
         }
 
-        function createNote(container, src) {
-            const note = document.createElement('img');
-            note.src = src;
-            note.classList.add('falling-note');
-            note.style.left = Math.random() * 90 + "%";
-            note.style.animationDuration = (Math.random() * 2 + 1.5) + "s"; 
-            note.style.width = (Math.random() * 40 + 50) + "px"; 
-            container.appendChild(note);
-            setTimeout(() => { note.remove(); }, 3500);
+        function showWin(text, amount) {
+            const msg = document.getElementById('winMsg');
+            msg.querySelector('.win-text').innerText = text;
+            msg.querySelector('.win-amount').innerText = "+ " + amount;
+            
+            msg.style.transition = 'cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s';
+            msg.style.transform = "translate(-50%, -50%) scale(1)";
         }
 
-        function clearRain() {
-            document.getElementById('rainLayer').innerHTML = '';
+        function startRain(img) {
+            const container = document.getElementById('rainLayer');
+            for(let i=0; i<50; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('img');
+                    el.src = img;
+                    el.className = 'falling-note';
+                    el.style.left = Math.random() * 90 + '%';
+                    el.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                    container.appendChild(el);
+                    setTimeout(() => el.remove(), 3000);
+                }, i * 50);
+            }
         }
     </script>
 </body>
