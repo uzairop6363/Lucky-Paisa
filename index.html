@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Final</title>
+    <title>Lucky Paisa - Official</title>
     <style>
         /* --- 1. CORE SETTINGS --- */
         body {
             margin: 0; padding: 0;
-            background-color: #0d0015; 
+            background-color: #000; /* Loading ke peeche black */
             font-family: 'Segoe UI', sans-serif;
             height: 100vh; width: 100vw;
             overflow: hidden;
@@ -16,6 +16,47 @@
             user-select: none; -webkit-user-select: none;
         }
 
+        /* --- 2. LOADING SCREEN (SABSE UPAR) --- */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('assets/loading_poster.jpg'); /* YOUR POSTER */
+            background-size: cover; background-position: center;
+            z-index: 9999; /* Game ke upar */
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+            padding-bottom: 80px; /* Bar ko neeche rakhne ke liye */
+            transition: opacity 0.8s ease-out; /* Smooth Fade Out */
+        }
+
+        .loading-text {
+            color: #ffd700; font-family: monospace; font-size: 18px; font-weight: bold;
+            margin-bottom: 10px; text-shadow: 0 2px 5px #000; letter-spacing: 2px;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* Loading Bar Container (Frame) */
+        .progress-container {
+            width: 80%; max-width: 300px; height: 30px;
+            background-image: url('assets/loading_frame.png'); /* YOUR FRAME */
+            background-size: 100% 100%;
+            position: relative;
+            padding: 4px; /* Frame ke andar gap */
+            box-sizing: border-box;
+            filter: drop-shadow(0 0 10px gold);
+        }
+
+        /* The Liquid Gold Filler */
+        .progress-fill {
+            height: 100%; width: 0%; /* Starts at 0 */
+            background: linear-gradient(90deg, #b8860b, #ffd700, #ffec8b, #b8860b);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            animation: shimmer 1s linear infinite;
+            transition: width 0.1s linear;
+        }
+        @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+        /* --- 3. GAME WRAPPER (HIDDEN INITIALLY) --- */
         .game-wrapper {
             position: relative;
             width: 100%; height: 100%;
@@ -24,7 +65,11 @@
             background-size: cover; background-position: center 80%; 
             display: flex; flex-direction: column; align-items: center;
             overflow: hidden;
+            opacity: 0; /* Loader hatne tak chupao */
+            transition: opacity 1s ease-in;
         }
+
+        .game-wrapper.active { opacity: 1; }
 
         .game-wrapper::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -34,7 +79,7 @@
         }
         @keyframes breatheBG { from{opacity:0.8;} to{opacity:1;} }
 
-        /* --- 2. PARTICLES --- */
+        /* --- 4. PARTICLES --- */
         .particle {
             position: absolute; background: gold; border-radius: 50%; opacity: 0.6; pointer-events: none;
             animation: floatUp linear infinite; z-index: 2;
@@ -46,29 +91,18 @@
         }
         .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 90; }
 
-        /* --- 3. UI ELEMENTS (Back Btn & Logo) --- */
-        
-        /* NEW BACK BUTTON */
+        /* --- 5. UI ELEMENTS --- */
         .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background-image: url('assets/btn_back.png'); /* NEW ASSET */
-            background-size: 100% 100%;
-            background-color: transparent; border: none;
-            cursor: pointer;
-            z-index: 60;
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
+            position: absolute; top: 20px; left: 20px; width: 50px; height: 50px;
+            background-image: url('assets/btn_back.png'); 
+            background-size: 100% 100%; background-color: transparent; border: none;
+            cursor: pointer; z-index: 60; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
             transition: transform 0.1s;
         }
         .back-btn:active { transform: scale(0.9); }
 
         .logo-area {
-            /* Margin kam kiya taake game uper shift ho */
-            margin-top: 20px; 
-            text-align: center; z-index: 50; position: relative;
+            margin-top: 20px; text-align: center; z-index: 50; position: relative;
             animation: floatLogo 3s ease-in-out infinite alternate;
         }
         .logo-img {
@@ -83,10 +117,9 @@
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.9)) brightness(1.1);
         }
 
-        /* --- 4. SLOT MACHINE --- */
+        /* --- 6. SLOT MACHINE --- */
         .slot-container {
-            position: relative; width: 360px; height: 320px; 
-            margin-top: 5px; /* Gap reduced to lift game */
+            position: relative; width: 360px; height: 320px; margin-top: 5px;
             display: flex; justify-content: center; align-items: center; z-index: 5; 
             filter: drop-shadow(0 30px 50px rgba(0,0,0,1));
         }
@@ -124,12 +157,9 @@
             filter: contrast(1.15) brightness(1.1);
         }
 
-        /* --- 5. CONTROLS --- */
+        /* --- 7. CONTROLS --- */
         .controls-area {
-            margin-top: auto; 
-            /* Margin increased to LIFT buttons up from bottom edge */
-            margin-bottom: 50px; 
-            width: 100%; padding: 0 25px; box-sizing: border-box; 
+            margin-top: auto; margin-bottom: 50px; width: 100%; padding: 0 25px; box-sizing: border-box; 
             display: flex; flex-direction: row; justify-content: space-between; align-items: center;
             z-index: 50; position: relative;
         }
@@ -148,17 +178,12 @@
             display: flex; justify-content: center; align-items: center;
             padding-left: 10px; padding-bottom: 4px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
         }
-        
-        /* TEXT MADE SMALLER FOR BETTER FIT */
         .balance-text {
-            color: #fffebb; 
-            font-weight: 900; 
-            font-size: 20px; /* Reduced from 24px to 20px */
-            font-family: 'Segoe UI', monospace;
+            color: #fffebb; font-weight: 900; font-size: 20px; font-family: 'Segoe UI', monospace;
             text-shadow: 0 2px 4px #000; letter-spacing: 1px;
         }
 
-        /* --- 6. WIN OVERLAY --- */
+        /* --- 8. WIN OVERLAY --- */
         .win-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
@@ -188,8 +213,7 @@
         @keyframes popInAmount { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         .win-amount {
-            font-family: 'Impact', 'Arial Black', sans-serif;
-            font-size: 50px; font-weight: 900; letter-spacing: 2px;
+            font-family: 'Impact', 'Arial Black', sans-serif; font-size: 50px; font-weight: 900; letter-spacing: 2px;
             background: linear-gradient(to bottom, #ffffff 10%, #ffd700 50%, #ff8c00 90%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             -webkit-text-stroke: 1px rgba(0,0,0,0.2); filter: drop-shadow(0 4px 0 #000000);
@@ -220,11 +244,18 @@
 </head>
 <body>
 
+    <div id="loader">
+        <div class="loading-text">LOADING...</div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+    </div>
+
     <div class="game-wrapper" id="gameScreen">
         <div id="particles"></div>
         <div class="rain-container" id="rainLayer"></div>
 
-        <button class="back-btn" onclick="alert('Back to Lobby')"></button>
+        <button class="back-btn" onclick="alert('Going Back...')"></button>
 
         <div class="win-overlay" id="winMsg" onclick="closeWin()">
             <div class="sunburst"></div>
@@ -259,7 +290,33 @@
     </div>
 
     <script>
-        // --- CONFIG & ASSETS ---
+        // --- LOADING LOGIC ---
+        window.onload = function() {
+            const bar = document.getElementById('progressBar');
+            const loader = document.getElementById('loader');
+            const game = document.getElementById('gameScreen');
+            let width = 0;
+
+            // Fake Loading Animation
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Fade out loader
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        // Reveal Game
+                        game.classList.add('active');
+                        initReels(); // Start game logic
+                    }, 800);
+                } else {
+                    width++;
+                    bar.style.width = width + '%';
+                }
+            }, 30); // Speed of loading
+        };
+
+        // --- GAME ASSETS & LOGIC ---
         const symbols = [
             { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', type: 'big', multiplier: 3 },
             { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', type: 'super', multiplier: 5 },
@@ -439,8 +496,6 @@
                 pContainer.appendChild(p);
             }
         }
-
-        initReels();
     </script>
 </body>
 </html>
