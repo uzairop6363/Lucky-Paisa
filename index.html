@@ -18,21 +18,21 @@
         .game-wrapper {
             position: relative;
             width: 100%; height: 100%;
-            max-width: 500px; /* Optimized for mobile portrait */
+            max-width: 500px; 
             background-image: url('assets/royal_bg.jpg'); 
-            background-size: cover; background-position: center 80%; /* Adjusted BG focus */
+            background-size: cover; background-position: center 80%; 
             display: flex; flex-direction: column; align-items: center;
             overflow: hidden;
         }
 
-        /* Dark Vignette & Color Overlay */
+        /* Overlay */
         .game-wrapper::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, rgba(100,0,150,0.2) 0%, #0a0010 100%);
             z-index: 1; pointer-events: none;
         }
 
-        /* --- 2. BACKGROUND EFFECTS (Particles & Rain) --- */
+        /* --- 2. PARTICLES & RAIN --- */
         .particle {
             position: absolute; background: gold; border-radius: 50%; opacity: 0.6; pointer-events: none;
             animation: floatUp linear infinite; z-index: 2;
@@ -44,41 +44,42 @@
         }
         .rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 90; }
 
-        /* --- 3. NEW ASSETS LAYER (Logo & King) --- */
+        /* --- 3. LOGO & KING --- */
         
-        /* 3D LOGO IMAGE */
+        /* 3D LOGO */
         .logo-area {
             margin-top: 30px; text-align: center; z-index: 50; position: relative;
             animation: floatLogo 3s ease-in-out infinite alternate;
         }
         .logo-img {
-            width: 90%; max-width: 380px; height: auto;
+            width: 85%; max-width: 350px; height: auto;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
         }
         @keyframes floatLogo { from{transform:translateY(0);} to{transform:translateY(-10px);} }
 
-        /* KING CHARACTER (The Holder) */
+        /* KING CHARACTER (Fixed Position) */
         .king-char {
             position: absolute;
-            bottom: 120px; /* Adjust to align hand with frame bottom */
+            /* Yahan change kiya hai taake King upar aaye */
+            bottom: 120px; 
             left: 50%;
             transform: translateX(-50%);
-            width: 120%; /* Make him big */
-            max-width: 550px;
+            width: 135%; /* Thoda aur healthy kiya */
+            max-width: 600px;
             height: auto;
-            z-index: 4; /* Behind Slot (z-5) but in front of BG */
+            z-index: 4; /* Frame ke peeche */
             pointer-events: none;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.9)) brightness(1.1);
         }
 
         /* --- 4. SLOT MACHINE --- */
         .slot-container {
             position: relative;
             width: 360px; height: 320px;
-            margin-top: 20px; /* Spacing from logo */
+            margin-top: 5px; /* Thoda gap kam kiya King ke hath ke liye */
             display: flex; justify-content: center; align-items: center;
-            z-index: 5; /* In front of King */
-            filter: drop-shadow(0 30px 50px rgba(0,0,0,1)); /* Heavy shadow for depth */
+            z-index: 5; /* King ke aage */
+            filter: drop-shadow(0 30px 50px rgba(0,0,0,1));
         }
 
         .slot-frame {
@@ -87,7 +88,7 @@
             background-size: 100% 100%;
             z-index: 20; pointer-events: none;
         }
-        /* Glass Reflection */
+        /* Glass Shine */
         .slot-frame::after {
             content: ''; position: absolute; top: 15%; left: 13%; width: 74%; height: 60%;
             background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 40%);
@@ -112,9 +113,9 @@
             filter: contrast(1.15) brightness(1.1);
         }
 
-        /* --- 5. CONTROLS & NEW UI --- */
+        /* --- 5. CONTROLS --- */
         .controls-area {
-            margin-top: auto; margin-bottom: 40px;
+            margin-top: auto; margin-bottom: 30px;
             display: flex; flex-direction: column; align-items: center;
             z-index: 50; width: 100%; position: relative;
         }
@@ -125,25 +126,28 @@
             background-size: 100% 100%; background-color: transparent; border: none;
             cursor: pointer; transition: all 0.1s;
             filter: drop-shadow(0 0 25px rgba(255, 165, 0, 0.5));
-            position: relative; bottom: -10px;
+            position: relative; bottom: -5px;
         }
         .spin-btn:active { transform: scale(0.95); filter: brightness(0.8); }
         .spin-btn:disabled { filter: grayscale(1); transform: scale(0.95); cursor: not-allowed; }
 
-        /* NEW ROYAL BALANCE BOX */
+        /* FIXED BALANCE BOX */
         .balance-box {
-            width: 220px; height: 55px;
+            width: 230px; height: 60px;
             background-image: url('assets/ui_balance_royal.png');
             background-size: 100% 100%; background-repeat: no-repeat;
-            display: flex; justify-content: center; align-items: center;
-            padding-left: 40px; /* Offset text to avoid crown area */
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            padding-left: 35px; /* Crown se doori */
             padding-right: 10px;
-            margin-bottom: 15px;
+            padding-top: 5px; /* Text ko center lane ke liye neeche kiya */
+            margin-bottom: 10px;
             filter: drop-shadow(0 5px 10px rgba(0,0,0,0.7));
         }
         .balance-text {
-            color: #ffd700; font-weight: bold; font-size: 18px; font-family: monospace;
-            text-shadow: 0 1px 2px #000; letter-spacing: 1px;
+            color: #fffebb; font-weight: 900; font-size: 20px; font-family: 'Segoe UI', monospace;
+            text-shadow: 0 2px 4px #000; letter-spacing: 1px;
         }
 
         /* --- 6. WIN & ANIMATIONS --- */
@@ -206,7 +210,7 @@
     </div>
 
     <script>
-        // --- JS LOGIC (Same as before, just works with new UI) ---
+        // --- JS LOGIC (Unchanged - Logic is perfect) ---
         const symbols = [
             { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', name: 'GOOD WIN' },
             { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', name: 'BIG WIN' },
@@ -242,9 +246,6 @@
             const res2 = getRandomSymbol();
             const res3 = getRandomSymbol();
             
-            // Uncomment for testing wins:
-            // if(Math.random() > 0.5) { res2 = res1; res3 = res1; }
-
             rollReel('strip1', res1, 2000); 
             rollReel('strip2', res2, 2500); 
             rollReel('strip3', res3, 3000); 
