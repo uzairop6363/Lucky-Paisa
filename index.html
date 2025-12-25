@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lucky Paisa - Royal Edition</title>
+    <style>
+        /* --- 1. CORE & BACKGROUND --- */
+        body {
+            margin: 0; padding: 0;
+            background-color: #1a0525; /* Deep Purple Fallback */
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh; width: 100vw;
+            overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .game-wrapper {
+            position: relative;
+            width: 100%; height: 100%;
+            max-width: 500px; /* Mobile View */
+            background-image: url('assets/royal_bg.jpg'); 
+            background-size: cover; background-position: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- 2. HEADER & LOGO --- */
+        .logo-area {
+            margin-top: 40px;
+            text-align: center;
+            z-index: 10;
+        }
+        .logo-text {
+            font-size: 40px; font-weight: 900;
+            color: gold;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #ff00de, 0 0 20px #5500ff;
+            letter-spacing: 2px;
+            background: linear-gradient(to bottom, #ffd700, #b8860b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+
+        /* --- 3. SLOT MACHINE FRAME --- */
+        .slot-container {
+            position: relative;
+            width: 340px; height: 300px;
+            margin-top: 30px;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 5;
+        }
+
+        .slot-frame {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: url('assets/slot_frame.png');
+            background-size: 100% 100%;
+            z-index: 20; /* Frame upar rahega */
+            pointer-events: none;
+        }
+
+        /* REELS (Ghoomne waly daban) */
+        .reels-wrapper {
+            width: 270px; height: 180px; /* Adjust according to frame gap */
+            display: flex; gap: 10px;
+            overflow: hidden; /* Masking */
+            position: relative;
+            background: rgba(0,0,0,0.8); /* Dark background behind reels */
+            border-radius: 10px;
+            padding: 0 5px;
+        }
+
+        .reel {
+            flex: 1;
+            display: flex; flex-direction: column;
+            align-items: center;
+            /* Animation Logic ke liye */
+            transform: translateY(0); 
+        }
+
+        .reel-icon {
+            width: 80px; height: 80px;
+            margin: 5px 0;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            filter: drop-shadow(0 0 5px gold);
+        }
+
+        /* Blur Effect jab ghoome */
+        .blur-motion {
+            filter: blur(5px);
+            transition: filter 0.1s;
+        }
+
+        /* --- 4. CONTROLS --- */
+        .controls-area {
+            margin-top: auto; margin-bottom: 50px;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 50;
+        }
+
+        .spin-btn {
+            width: 100px; height: 100px;
+            background-image: url('assets/btn_spin.png');
+            background-size: contain; background-repeat: no-repeat;
+            background-color: transparent; border: none;
+            cursor: pointer;
+            transition: transform 0.1s;
+            filter: drop-shadow(0 0 15px gold);
+        }
+        .spin-btn:active { transform: scale(0.9); }
+        .spin-btn:disabled { filter: grayscale(1); cursor: not-allowed; }
+
+        .balance-box {
+            background: linear-gradient(90deg, #220033, #440066);
+            border: 2px solid gold;
+            padding: 10px 30px;
+            border-radius: 50px;
+            color: white; font-weight: bold; font-size: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            text-shadow: 0 0 5px violet;
+        }
+
+        /* --- 5. WIN EFFECTS & RAIN --- */
+        .win-overlay {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 100;
+            text-align: center;
+            pointer-events: none;
+        }
+        .win-text {
+            font-size: 50px; font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff8800;
+            animation: pop-win 0.5s forwards;
+        }
+        .win-amount {
+            font-size: 30px; color: gold; font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 0 2px 5px black;
+        }
+
+        @keyframes pop-win {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Money Rain Container */
+        .rain-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 80;
+        }
+        .falling-note {
+            position: absolute; top: -100px;
+            width: 60px; /* Note size */
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        
+        <div class="rain-container" id="rainLayer"></div>
+
+        <div class="win-overlay" id="winMsg">
+            <div class="win-text">MEGA WIN</div>
+            <div class="win-amount">+5000</div>
+        </div>
+
+        <div class="logo-area">
+            <div class="logo-text">LUCKY PAISA</div>
+        </div>
+
+        <div class="slot-container">
+            <div class="slot-frame"></div> <div class="reels-wrapper">
+                <div class="reel" id="reel1">
+                    <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
+                    <div class="reel-icon" style="background-image: url('assets/icon_1000.png')"></div>
+                    <div class="reel-icon" style="background-image: url('assets/icon_500.png')"></div>
+                </div>
+                <div class="reel" id="reel2">
+                    <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
+                    <div class="reel-icon" style="background-image: url('assets/icon_100.png')"></div>
+                    <div class="reel-icon" style="background-image: url('assets/icon_500.png')"></div>
+                </div>
+                <div class="reel" id="reel3">
+                    <div class="reel-icon" style="background-image: url('assets/icon_5000.png')"></div>
+                    <div class="reel-icon" style="background-image: url('assets/icon_1000.png')"></div>
+                    <div class="reel-icon" style="background-image: url('assets/icon_100.png')"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-area">
+            <div class="balance-box">PKR <span id="balance">50000</span></div>
+            <button class="spin-btn" id="spinBtn" onclick="spin()"></button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- GAME CONFIG ---
+        // Icons list (Must match filenames)
+        const symbols = [
+            { id: 100, img: 'assets/icon_100.png', rain: 'assets/falling_100.png', name: 'SMALL WIN' },
+            { id: 500, img: 'assets/icon_500.png', rain: 'assets/falling_500.png', name: 'BIG WIN' },
+            { id: 1000, img: 'assets/icon_1000.png', rain: 'assets/falling_1000.png', name: 'MEGA WIN' },
+            { id: 5000, img: 'assets/icon_5000.png', rain: 'assets/falling_5000.png', name: 'ULTIMATE WIN' }
+        ];
+
+        let balance = 50000;
+        let isSpinning = false;
+        const spinCost = 100;
+
+        // --- SPIN LOGIC ---
+        function spin() {
+            if (isSpinning) return;
+            if (balance < spinCost) { alert("Insufficient Balance!"); return; }
+
+            // Deduct Balance
+            balance -= spinCost;
+            updateBalance();
+
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+            document.getElementById('winMsg').style.transform = "translate(-50%, -50%) scale(0)"; // Hide win msg
+            clearRain(); // Stop old rain
+
+            // Start Reels
+            startReelAnimation('reel1', 2000);
+            startReelAnimation('reel2', 2500); // Thoda late rukega
+            startReelAnimation('reel3', 3000); // Sabse late rukega
+        }
+
+        function startReelAnimation(reelId, duration) {
+            const reel = document.getElementById(reelId);
+            reel.classList.add('blur-motion'); // Add Speed Blur
+            
+            // Fast Random Shuffling Loop
+            const interval = setInterval(() => {
+                const randomSym = symbols[Math.floor(Math.random() * symbols.length)];
+                // Hum reel ke andar 3 icons dikhate hain taake bhara hua lage
+                // Lekin sirf CENTER wala matter karta hai (Middle Icon)
+                reel.innerHTML = `
+                    <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
+                    <div class="reel-icon" style="background-image: url('${randomSym.img}')" data-val="${randomSym.id}"></div>
+                    <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
+                `;
+            }, 100);
+
+            // Stop Logic
+            setTimeout(() => {
+                clearInterval(interval);
+                finalizeReel(reelId);
+            }, duration);
+        }
+
+        function getRandomIcon() {
+            return symbols[Math.floor(Math.random() * symbols.length)].img;
+        }
+
+        // Global results holder
+        let results = [];
+
+        function finalizeReel(reelId) {
+            const reel = document.getElementById(reelId);
+            reel.classList.remove('blur-motion');
+
+            // Determine Final Symbol (Cheat Logic: Thoda zyada jeetne do demo ke liye)
+            // 40% Chance ke teeno same honay ki koshish karein
+            let finalSym;
+            
+            if (results.length > 0 && Math.random() > 0.6) {
+                // Try to match previous reel
+                finalSym = symbols.find(s => s.id === results[0]);
+            } else {
+                finalSym = symbols[Math.floor(Math.random() * symbols.length)];
+            }
+            
+            // Fallback agar find fail ho
+            if(!finalSym) finalSym = symbols[Math.floor(Math.random() * symbols.length)];
+
+            // Set Final HTML
+            reel.innerHTML = `
+                <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
+                <div class="reel-icon" style="background-image: url('${finalSym.img}')" id="res-${reelId}" data-val="${finalSym.id}"></div>
+                <div class="reel-icon" style="background-image: url('${getRandomIcon()}')"></div>
+            `;
+
+            // Push result
+            if(reelId === 'reel1') results = [finalSym.id];
+            else results.push(finalSym.id);
+
+            // Check Win jab teeno ruk jayen
+            if (results.length === 3) {
+                checkWin();
+                isSpinning = false;
+                document.getElementById('spinBtn').disabled = false;
+            }
+        }
+
+        function checkWin() {
+            const val1 = results[0];
+            const val2 = results[1];
+            const val3 = results[2];
+
+            // WIN CONDITION: Teeno same hone chahiye
+            if (val1 === val2 && val2 === val3) {
+                const winData = symbols.find(s => s.id === val1);
+                const winAmount = val1 * 10; // 10x Win
+                
+                balance += winAmount;
+                updateBalance();
+                
+                showWinMessage(winData.name, winAmount);
+                startMoneyRain(winData.rain);
+            }
+        }
+
+        // --- WIN UI ---
+        function showWinMessage(text, amount) {
+            const msgBox = document.getElementById('winMsg');
+            msgBox.querySelector('.win-text').innerText = text;
+            msgBox.querySelector('.win-amount').innerText = "+" + amount;
+            
+            // Pop Animation
+            msgBox.style.transform = "translate(-50%, -50%) scale(1)";
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').innerText = balance;
+        }
+
+        // --- MONEY RAIN SYSTEM ---
+        function startMoneyRain(imgSrc) {
+            const container = document.getElementById('rainLayer');
+            // 50 notes girayenge
+            for(let i=0; i<50; i++) {
+                setTimeout(() => {
+                    createNote(container, imgSrc);
+                }, i * 100); // Har 100ms baad ek note
+            }
+        }
+
+        function createNote(container, src) {
+            const note = document.createElement('img');
+            note.src = src;
+            note.classList.add('falling-note');
+            
+            // Random Position & Speed
+            note.style.left = Math.random() * 100 + "%";
+            note.style.animationDuration = (Math.random() * 2 + 2) + "s"; // 2s to 4s speed
+            note.style.width = (Math.random() * 40 + 40) + "px"; // Random size
+            
+            container.appendChild(note);
+
+            // Remove after animation
+            setTimeout(() => { note.remove(); }, 4000);
+        }
+
+        function clearRain() {
+            document.getElementById('rainLayer').innerHTML = '';
+        }
+
+    </script>
+</body>
+</html>
