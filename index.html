@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Final Adjustment</title>
+    <title>Lucky Paisa - Final Polish</title>
     <style>
         /* --- 1. CORE SETTINGS --- */
         body {
@@ -118,15 +118,33 @@
         .spin-btn:active { transform: scale(0.95); filter: brightness(0.8); }
         .spin-btn:disabled { filter: grayscale(1); transform: scale(0.95); cursor: not-allowed; }
 
+        /* --- BALANCE BOX FIXED (NOT CHIBBA) --- */
         .balance-box {
-            width: 190px; height: 55px; background-image: url('assets/ui_balance_royal.png');
-            background-size: 100% 100%; background-repeat: no-repeat;
+            /* Box bada kiya aur shape theek ki */
+            width: 240px; 
+            height: 75px; 
+            
+            background-image: url('assets/ui_balance_royal.png');
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+            
             display: flex; justify-content: center; align-items: center;
-            padding-left: 15px; padding-bottom: 3px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
+            
+            /* Text alignment adjustments */
+            padding-left: 10px; 
+            padding-bottom: 4px;
+            
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
         }
+        
         .balance-text {
-            color: #fffebb; font-weight: 900; font-size: 19px; font-family: 'Segoe UI', monospace;
-            text-shadow: 0 2px 4px #000; letter-spacing: 0.5px;
+            color: #fffebb; 
+            font-weight: 900; 
+            /* Text thoda choda kiya jesa aapne bola */
+            font-size: 24px; 
+            font-family: 'Segoe UI', monospace;
+            text-shadow: 0 2px 4px #000; 
+            letter-spacing: 1px;
         }
 
         /* --- 6. WIN OVERLAY --- */
@@ -147,19 +165,15 @@
         .animate-win-img { animation: majesticEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         @keyframes majesticEntrance { 0% { transform: scale(0) translateY(50px); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- ADJUSTED BOX & TEXT --- */
+        /* --- WIN AMOUNT BOX --- */
         .win-amount-box {
-            margin-top: 20px; /* Thoda gap barhaya */
-            
-            /* Box BARA kar diya */
+            margin-top: 20px;
             width: 380px;  
             height: 120px; 
-            
             background-image: url('assets/ui_win_panel.png');
             background-size: 100% 100%; 
             background-repeat: no-repeat;
             background-position: center;
-            
             display: flex; justify-content: center; align-items: center;
             transform: scale(0); opacity: 0;
             padding-bottom: 5px;
@@ -168,18 +182,13 @@
         .animate-amount { animation: popInAmount 0.5s ease-out 0.6s forwards; }
         @keyframes popInAmount { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- TEXT SIZE ADJUSTED --- */
         .win-amount {
-            /* Font size chota kiya taake box mein fit aaye */
             font-family: 'Impact', 'Arial Black', sans-serif;
             font-size: 50px; 
             font-weight: 900; 
             letter-spacing: 2px;
-            
             background: linear-gradient(to bottom, #ffffff 10%, #ffd700 50%, #ff8c00 90%);
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             -webkit-text-stroke: 1px rgba(0,0,0,0.2);
             filter: drop-shadow(0 4px 0 #000000);
         }
@@ -215,13 +224,10 @@
 
         <div class="win-overlay" id="winMsg" onclick="closeWin()">
             <div class="sunburst"></div>
-            
             <img src="" id="winImage" class="win-title-img" alt="Win">
-            
             <div class="win-amount-box" id="winAmountBox">
                 <div class="win-amount" id="winAmountText">+0</div>
             </div>
-
             <div class="tap-hint">Tap to Continue</div>
         </div>
 
@@ -243,7 +249,7 @@
         <div class="controls-area">
             <button class="spin-btn" id="spinBtn" onclick="spin()"></button>
             <div class="balance-box">
-                <span class="balance-text">PKR <span id="balance">50000</span></span>
+                <span class="balance-text"><span id="balance">50000</span></span>
             </div>
         </div>
     </div>
@@ -277,7 +283,6 @@
             startPassiveRain();
         }
 
-        // --- PASSIVE RAIN ---
         function startPassiveRain() {
             setInterval(() => {
                 if(!document.getElementById('winMsg').classList.contains('active')) {
@@ -290,8 +295,7 @@
             const container = document.getElementById('rainLayer');
             const randomNote = symbols[Math.floor(Math.random() * symbols.length)].rain;
             const el = document.createElement('img');
-            el.src = randomNote;
-            el.className = 'falling-note';
+            el.src = randomNote; el.className = 'falling-note';
             el.style.left = Math.random() * 90 + '%';
             el.style.animationDuration = (Math.random() * 2 + 3) + 's';
             el.style.width = (Math.random() * 30 + 40) + 'px';
