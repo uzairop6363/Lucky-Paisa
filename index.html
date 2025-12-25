@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lucky Paisa - Casino Edition</title>
+    <title>Lucky Paisa - Final Adjustment</title>
     <style>
         /* --- 1. CORE SETTINGS --- */
         body {
@@ -140,21 +140,21 @@
         .win-overlay.active { opacity: 1; pointer-events: all; }
 
         .win-title-img {
-            width: 95%; max-width: 450px; height: auto; display: block;
+            width: 90%; max-width: 450px; height: auto; display: block;
             filter: drop-shadow(0 0 30px rgba(255,215,0,0.6)); transform: scale(0);
         }
         
         .animate-win-img { animation: majesticEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         @keyframes majesticEntrance { 0% { transform: scale(0) translateY(50px); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- NEW WIDE PANEL --- */
+        /* --- ADJUSTED BOX & TEXT --- */
         .win-amount-box {
-            margin-top: 10px;
-            /* Wider and taller to look like a scoreboard */
-            width: 320px; 
-            height: 90px; 
+            margin-top: 20px; /* Thoda gap barhaya */
             
-            /* Uses the new panel asset */
+            /* Box BARA kar diya */
+            width: 380px;  
+            height: 120px; 
+            
             background-image: url('assets/ui_win_panel.png');
             background-size: 100% 100%; 
             background-repeat: no-repeat;
@@ -162,30 +162,25 @@
             
             display: flex; justify-content: center; align-items: center;
             transform: scale(0); opacity: 0;
-            /* Text thoda sa upar adjust kiya taake center me lage */
             padding-bottom: 5px;
         }
         
         .animate-amount { animation: popInAmount 0.5s ease-out 0.6s forwards; }
         @keyframes popInAmount { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- CASINO GOLD TEXT EFFECT --- */
+        /* --- TEXT SIZE ADJUSTED --- */
         .win-amount {
-            /* Heavy, blocky font like the reference */
+            /* Font size chota kiya taake box mein fit aaye */
             font-family: 'Impact', 'Arial Black', sans-serif;
-            font-size: 65px; 
+            font-size: 50px; 
             font-weight: 900; 
             letter-spacing: 2px;
             
-            /* Gradient matching reference: White Top -> Gold Middle -> Orange Bottom */
             background: linear-gradient(to bottom, #ffffff 10%, #ffd700 50%, #ff8c00 90%);
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
             
-            /* Stroke (optional support) */
             -webkit-text-stroke: 1px rgba(0,0,0,0.2);
-
-            /* Hard Drop Shadow to pop from black background */
             filter: drop-shadow(0 4px 0 #000000);
         }
 
@@ -204,7 +199,7 @@
         @keyframes shake { 10%, 90% { transform: translate3d(-3px, 0, 0); } 20%, 80% { transform: translate3d(5px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-7px, 0, 0); } 40%, 60% { transform: translate3d(7px, 0, 0); } }
 
         .tap-hint {
-            position: absolute; bottom: 100px; color: rgba(255,255,255,0.5);
+            position: absolute; bottom: 80px; color: rgba(255,255,255,0.5);
             font-size: 14px; text-transform: uppercase; letter-spacing: 2px;
             animation: pulseHint 1.5s infinite;
         }
