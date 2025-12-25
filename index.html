@@ -57,16 +57,18 @@
         }
         @keyframes floatLogo { from{transform:translateY(0);} to{transform:translateY(-10px);} }
 
-        /* KING CHARACTER (Fixed - Bohot Chota & Fit) */
+        /* KING CHARACTER (Fixed - Bottom Left Position) */
         .king-char {
             position: absolute;
-            /* Size chota hone ki wajah se isay thoda aur upar uthaya hai */
-            bottom: 145px; 
-            left: 50%;
-            transform: translateX(-50%);
-            /* SIZE KAM KIYA GAYA HAI */
-            width: 80%; /* Pehle 135% tha, ab 80% kar diya */
-            max-width: 350px; /* Max width 600px se kam karke 350px kar di */
+            /* Neechay set kiya */
+            bottom: 20px; 
+            /* Left side par set kiya (thoda sa bahar nikal kar) */
+            left: -30px;
+            /* Centering wala transform hata diya */
+            transform: none;
+            /* Size thoda badhaya taake side se acha lage */
+            width: 120%;
+            max-width: 500px;
             height: auto;
             z-index: 4; 
             pointer-events: none;
@@ -338,3 +340,4 @@
     </script>
 </body>
 </html>
+
